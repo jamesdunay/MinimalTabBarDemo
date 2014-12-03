@@ -78,17 +78,15 @@ typedef enum : NSUInteger {
 //    return self;
 //}
 
+
 -(void)layoutSubviews{
     [super layoutSubviews];
-    [self addConstraints:[self defaultConstraints]];
-    
+    [self addConstraints:[self defaultConstraints]];    
 }
 
 -(NSArray*)defaultConstraints{
     NSMutableArray* constraints = [[NSMutableArray alloc] init];
     
-    self.adjustableButtonConstaints = [[NSMutableArray alloc] init];
-
     [self.buttons enumerateObjectsUsingBlock:^(MinimalBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         [constraints addObject:[NSLayoutConstraint constraintWithItem:mbButton
                                                             attribute:NSLayoutAttributeWidth
@@ -114,21 +112,28 @@ typedef enum : NSUInteger {
                                                            multiplier:1.f
                                                              constant:0]];
         
-        NSLayoutConstraint* adjustableConstraint = [NSLayoutConstraint constraintWithItem:self.buttons[idx]
-                                                                                attribute:NSLayoutAttributeLeft
-                                                                                relatedBy:NSLayoutRelationEqual
-                                                                                   toItem:self
-                                                                                attribute:NSLayoutAttributeLeft
-                                                                               multiplier:1.f
-                                                                                 constant:(self.frame.size.width/self.numberOfViews)*idx];
-    
-        [constraints addObject:adjustableConstraint];
-        [self.adjustableButtonConstaints addObject:adjustableConstraint];
     }];
+    
+    
+    if (!self.adjustableButtonConstaints) {
+        self.adjustableButtonConstaints = [[NSMutableArray alloc] init];
+        
+        [self.buttons enumerateObjectsUsingBlock:^(MinimalBarButton *mbButton, NSUInteger idx, BOOL *stop) {
+            NSLayoutConstraint* adjustableConstraint = [NSLayoutConstraint constraintWithItem:self.buttons[idx]
+                                                                                    attribute:NSLayoutAttributeLeft
+                                                                                    relatedBy:NSLayoutRelationEqual
+                                                                                       toItem:self
+                                                                                    attribute:NSLayoutAttributeLeft
+                                                                                   multiplier:1.f
+                                                                                     constant:(self.frame.size.width/self.numberOfViews)*idx];
+            [self.adjustableButtonConstaints addObject:adjustableConstraint];
+        }];
+        
+        [constraints addObjectsFromArray:self.adjustableButtonConstaints];
+    }
     
     return [constraints copy];
 }
-
 
 - (void)createMenuItems:(NSArray*)viewControllers{
     
@@ -177,8 +182,8 @@ typedef enum : NSUInteger {
         case ButtonStateDisplayed:
             [mbButton setButtonState:ButtonStateSelected];
             
-            [self createSelectedStyleForButton:mbButton];
-            
+//            ToDo
+//            [self createSelectedStyleForButton:mbButton];
             [self collapseAllButtons];
             [self.mMinimalBarDelegate fadeToIndex:mbButton.tag];
             break;
@@ -209,26 +214,28 @@ typedef enum : NSUInteger {
     };
     
     [self.buttons enumerateObjectsUsingBlock:^(MinimalBarButton *mbButton, NSUInteger idx, BOOL *stop) {
-        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"cornerRadius"];
-        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-        animation.fromValue = [NSNumber numberWithFloat:0.0f];
-        animation.toValue = [NSNumber numberWithFloat:cornerRadius];
-        animation.duration = .17;
-        [mbButton.layer addAnimation:animation forKey:@"cornerRadius"];
-        [mbButton.layer setCornerRadius:cornerRadius];
+
+//        ToDo Menu Items
+
+//        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"cornerRadius"];
+//        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+//        animation.fromValue = [NSNumber numberWithFloat:0.0f];
+//        animation.toValue = [NSNumber numberWithFloat:cornerRadius];
+//        animation.duration = .17;
+//        [mbButton.layer addAnimation:animation forKey:@"cornerRadius"];
+//        [mbButton.layer setCornerRadius:cornerRadius];
         
         [mbButton setImage:[UIImage imageNamed:@"menu_icon"] forState:UIControlStateNormal];
         [mbButton setSelected:NO];
-        
     }];
     
     
-    CGFloat buttonWidth = self.defaultFrameSize.width/self.buttons.count;
+    CGFloat mbButtonWidth = self.frame.size.width/self.buttons.count;
     
     void (^animations)(void) = ^{
         
         [self.adjustableButtonConstaints enumerateObjectsUsingBlock:^(NSLayoutConstraint* constraint, NSUInteger idx, BOOL *stop) {
-            constraint.constant = buttonWidth * (self.adjustableButtonConstaints.count/2);
+            constraint.constant = mbButtonWidth * (self.adjustableButtonConstaints.count/2);
         }];
         
 //        self.constraintOne.constant = buttonWidth * 1;
@@ -237,7 +244,7 @@ typedef enum : NSUInteger {
 //        self.constraintFour.constant = buttonWidth * 2.5;
 //        self.constraintFive.constant = buttonWidth * 3;
         
-        self.frame = CGRectMake(0, (self.screenHeight-60) - displayYCoord, self.defaultFrameSize.width, 60);
+//        self.frame = CGRectMake(0, (self.screenHeight-60) - displayYCoord, self.defaultFrameSize.width, 60);
         
 //        [self.adjustableButtonConstaints enumerateObjectsUsingBlock:^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
 //            if ([(MenuButton*)constraint.firstItem isEqual:self.buttons[[self indexOfActiveButton]]]) {
@@ -270,8 +277,6 @@ typedef enum : NSUInteger {
     
     self.panGesture.enabled = NO;
     
-    [self.mMinimalBarDelegate darkenScreen];
-    
     void (^animations)(void) = ^{};
     animations = ^{
         [self showAllButtons];
@@ -279,12 +284,6 @@ typedef enum : NSUInteger {
         [self.adjustableButtonConstaints enumerateObjectsUsingBlock:^(NSLayoutConstraint* constraint, NSUInteger idx, BOOL *stop) {
             constraint.constant = self.frame.size.width/self.adjustableButtonConstaints.count * idx;
         }];
-        
-//        self.constraintOne.constant = self.frame.size.width/5 * 0;
-//        self.constraintTwo.constant = self.frame.size.width/5 * 1;
-//        self.constraintThree.constant = self.frame.size.width/5 * 2;
-//        self.constraintFour.constant = self.frame.size.width/5 * 3;
-//        self.constraintFive.constant = self.frame.size.width/5 * 4;
         
         self.frame = CGRectMake(0, (self.screenHeight-self.defaultFrameSize.height), self.defaultFrameSize.width, self.defaultFrameSize.height);
         [self layoutIfNeeded];
@@ -301,6 +300,8 @@ typedef enum : NSUInteger {
 
 
 
+#pragma Mark Pan Methods
+
 -(void)panSelectedButton:(UIPanGestureRecognizer *)gesture{
     CGPoint translatedPoint = [gesture translationInView:self];
     if ([gesture state] == UIGestureRecognizerStateBegan) {
@@ -308,7 +309,11 @@ typedef enum : NSUInteger {
         self.firstY = [[gesture view] center].y;
     }
     
+    NSInteger activeIndex = [self indexOfActiveButton];
+    
     //Matching swipe with scrollview
+
+    
     [self.mMinimalBarDelegate manualOffsetScrollview:(self.lastXOffset - translatedPoint.x)];
     self.lastXOffset = translatedPoint.x;
     
@@ -322,6 +327,8 @@ typedef enum : NSUInteger {
             [self switchToPageNext:YES];
         }else if (endingLocation.x >= 50) {
             [self switchToPageNext:NO];
+        }else{
+            [self returnScrollViewToSelectedTab];
         }
         
         CGFloat velocityX = (0.2*[gesture velocityInView:self].x);
@@ -338,25 +345,28 @@ typedef enum : NSUInteger {
 
 -(void)switchToPageNext:(BOOL)next{
     
-    int targetedButton = next ? next : -1;
+    NSInteger indextAdjustment = next ? next : -1;
     NSInteger activeIndex = [self indexOfActiveButton];
+    NSInteger targetedIndex = activeIndex + indextAdjustment;
     
-    if (activeIndex + targetedButton > 0 ||activeIndex + targetedButton < self.buttons.count) {
+    if (targetedIndex >= 0 && targetedIndex < self.buttons.count) {
         
         MinimalBarButton* activeButton = self.buttons[activeIndex];
-        MinimalBarButton* nextButton = self.buttons[activeIndex+targetedButton];
+        MinimalBarButton* nextButton = self.buttons[activeIndex+indextAdjustment];
         
-        //    [self removeBorderToView:activeButton];
-        //    [self addBorderToView:nextButton];
-        [self removeShadowFrom:activeButton];
-        [self addShadowTo:nextButton];
+//        [self removeBorderToView:activeButton];
+//        [self addBorderToView:nextButton];
+//        [self removeShadowFrom:activeButton];
+//        [self addShadowTo:nextButton];
+        
+        nextButton.backgroundColor = [UIColor whiteColor];
+        activeButton.backgroundColor = [UIColor clearColor];
         
         [activeButton setButtonState:ButtonStateDisplayed];
         [nextButton setButtonState:ButtonStateSelected];
         
         [self bringSubviewToFront:nextButton];
         void (^animations)(void) = ^{
-            
             [self.adjustableButtonConstaints enumerateObjectsUsingBlock:^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
                 if ([(MinimalBarButton*)constraint.firstItem isEqual:self.buttons[[self indexOfActiveButton]]]) {
                     constraint.constant = self.frame.size.width/5 * 2;
@@ -371,6 +381,12 @@ typedef enum : NSUInteger {
         [self.mMinimalBarDelegate didSwitchToIndex:nextButton.tag];
     }
 }
+
+-(void)returnScrollViewToSelectedTab{
+    NSInteger activeIndex = [self indexOfActiveButton];
+    [self.mMinimalBarDelegate sendScrollViewToPoint:CGPointMake(activeIndex * self.frame.size.width, 0)];
+}
+
 
 -(void)showAllButtons{
     [self.buttons enumerateObjectsUsingBlock:^(MinimalBarButton* mbButton, NSUInteger idx, BOOL *stop) {
