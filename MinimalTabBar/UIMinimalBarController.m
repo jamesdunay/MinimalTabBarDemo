@@ -55,7 +55,7 @@ static CGFloat overviewScreenDimensionMultiplyer = 3.5f;
     _minimalBar.mMinimalBarDelegate = self;
     _minimalBar.displayOverviewYCoord = self.view.frame.size.height - (self.view.frame.size.height/overviewScreenDimensionMultiplyer) + 64;
     _minimalBar.screenHeight = self.view.frame.size.height;
-    _minimalBar.defaultFrameSize = CGSizeMake(self.view.frame.size.width, 70);
+//    _minimalBar.defaultFrameSize = CGSizeMake(self.view.frame.size.width, 70);
     _minimalBar.translatesAutoresizingMaskIntoConstraints = NO;
     _minimalBar.backgroundColor = [UIColor blueColor];
     [self.view addSubview:_minimalBar];
@@ -108,6 +108,22 @@ static CGFloat overviewScreenDimensionMultiplyer = 3.5f;
                             ]];
     
     return [constraints copy];
+}
+
+#pragma Mark Delegate Methods
+-(void)fadeToIndex:(NSUInteger)pageIndex{
+    //Killed fade out to remove flicker. Also seemed unnecessary
+    
+    [UIView animateWithDuration:.1f animations:^{
+        [self.scrollView setAlpha:0.f];
+    } completion:^(BOOL finished){
+        CGFloat xPoint = pageIndex * self.view.frame.size.width;
+        [self.scrollView setContentOffset:CGPointMake(xPoint, 0)];
+        
+        [UIView animateWithDuration:.2f animations:^{
+            [self.scrollView setAlpha:1.f];
+        }];
+    }];
 }
 
 
