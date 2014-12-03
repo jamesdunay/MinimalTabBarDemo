@@ -15,6 +15,7 @@
 -(void)darkenScreen;
 -(void)lightenScreen;
 -(void)displayAllScreensWithStartingDisplayOn:(CGFloat)startingPosition;
+-(void)sendScrollViewToPoint:(CGPoint)point;
 @end
 
 @interface MinimalBar : UIView <UIGestureRecognizerDelegate>

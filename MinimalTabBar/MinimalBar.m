@@ -277,8 +277,6 @@ typedef enum : NSUInteger {
     
     self.panGesture.enabled = NO;
     
-    [self.mMinimalBarDelegate darkenScreen];
-    
     void (^animations)(void) = ^{};
     animations = ^{
         [self showAllButtons];
@@ -286,12 +284,6 @@ typedef enum : NSUInteger {
         [self.adjustableButtonConstaints enumerateObjectsUsingBlock:^(NSLayoutConstraint* constraint, NSUInteger idx, BOOL *stop) {
             constraint.constant = self.frame.size.width/self.adjustableButtonConstaints.count * idx;
         }];
-        
-//        self.constraintOne.constant = self.frame.size.width/5 * 0;
-//        self.constraintTwo.constant = self.frame.size.width/5 * 1;
-//        self.constraintThree.constant = self.frame.size.width/5 * 2;
-//        self.constraintFour.constant = self.frame.size.width/5 * 3;
-//        self.constraintFive.constant = self.frame.size.width/5 * 4;
         
         self.frame = CGRectMake(0, (self.screenHeight-self.defaultFrameSize.height), self.defaultFrameSize.width, self.defaultFrameSize.height);
         [self layoutIfNeeded];
@@ -308,6 +300,8 @@ typedef enum : NSUInteger {
 
 
 
+#pragma Mark Pan Methods
+
 -(void)panSelectedButton:(UIPanGestureRecognizer *)gesture{
     CGPoint translatedPoint = [gesture translationInView:self];
     if ([gesture state] == UIGestureRecognizerStateBegan) {
@@ -315,7 +309,11 @@ typedef enum : NSUInteger {
         self.firstY = [[gesture view] center].y;
     }
     
+    NSInteger activeIndex = [self indexOfActiveButton];
+    
     //Matching swipe with scrollview
+
+    
     [self.mMinimalBarDelegate manualOffsetScrollview:(self.lastXOffset - translatedPoint.x)];
     self.lastXOffset = translatedPoint.x;
     
@@ -329,6 +327,8 @@ typedef enum : NSUInteger {
             [self switchToPageNext:YES];
         }else if (endingLocation.x >= 50) {
             [self switchToPageNext:NO];
+        }else{
+            [self returnScrollViewToSelectedTab];
         }
         
         CGFloat velocityX = (0.2*[gesture velocityInView:self].x);
@@ -345,25 +345,28 @@ typedef enum : NSUInteger {
 
 -(void)switchToPageNext:(BOOL)next{
     
-    int targetedButton = next ? next : -1;
+    NSInteger indextAdjustment = next ? next : -1;
     NSInteger activeIndex = [self indexOfActiveButton];
+    NSInteger targetedIndex = activeIndex + indextAdjustment;
     
-    if (activeIndex + targetedButton > 0 ||activeIndex + targetedButton < self.buttons.count) {
+    if (targetedIndex >= 0 && targetedIndex < self.buttons.count) {
         
         MinimalBarButton* activeButton = self.buttons[activeIndex];
-        MinimalBarButton* nextButton = self.buttons[activeIndex+targetedButton];
+        MinimalBarButton* nextButton = self.buttons[activeIndex+indextAdjustment];
         
-        //    [self removeBorderToView:activeButton];
-        //    [self addBorderToView:nextButton];
-        [self removeShadowFrom:activeButton];
-        [self addShadowTo:nextButton];
+//        [self removeBorderToView:activeButton];
+//        [self addBorderToView:nextButton];
+//        [self removeShadowFrom:activeButton];
+//        [self addShadowTo:nextButton];
+        
+        nextButton.backgroundColor = [UIColor whiteColor];
+        activeButton.backgroundColor = [UIColor clearColor];
         
         [activeButton setButtonState:ButtonStateDisplayed];
         [nextButton setButtonState:ButtonStateSelected];
         
         [self bringSubviewToFront:nextButton];
         void (^animations)(void) = ^{
-            
             [self.adjustableButtonConstaints enumerateObjectsUsingBlock:^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
                 if ([(MinimalBarButton*)constraint.firstItem isEqual:self.buttons[[self indexOfActiveButton]]]) {
                     constraint.constant = self.frame.size.width/5 * 2;
@@ -378,6 +381,12 @@ typedef enum : NSUInteger {
         [self.mMinimalBarDelegate didSwitchToIndex:nextButton.tag];
     }
 }
+
+-(void)returnScrollViewToSelectedTab{
+    NSInteger activeIndex = [self indexOfActiveButton];
+    [self.mMinimalBarDelegate sendScrollViewToPoint:CGPointMake(activeIndex * self.frame.size.width, 0)];
+}
+
 
 -(void)showAllButtons{
     [self.buttons enumerateObjectsUsingBlock:^(MinimalBarButton* mbButton, NSUInteger idx, BOOL *stop) {
