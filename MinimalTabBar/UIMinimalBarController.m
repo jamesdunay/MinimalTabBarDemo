@@ -7,13 +7,17 @@
 //
 
 #import "UIMinimalBarController.h"
-
+#import "UIViewHitTestOverride.h"
+#import <QuartzCore/QuartzCore.h>
 
 static CGFloat minimalBarHeight = 70.f;
 
 @interface UIMinimalBarController ()
 
 @property (nonatomic, strong) UIScrollView* scrollView;
+@property (nonatomic, strong) UIView* touchableViewCover;
+@property (nonatomic, strong) UIViewHitTestOverride* coverView;
+@property (nonatomic) CGAffineTransform viewControllertransform;
 
 @end
 
@@ -32,10 +36,6 @@ static CGFloat overviewScreenDimensionMultiplyer = 3.5f;
 -(void)viewDidLoad{
 
     [self setupViews];
-    
-    CATransform3D theTransform = self.view.layer.sublayerTransform;
-    theTransform.m34 = 1.0 / -500;
-    self.view.layer.sublayerTransform = theTransform;
 }
 
 -(void)setupViews{
@@ -46,22 +46,29 @@ static CGFloat overviewScreenDimensionMultiplyer = 3.5f;
     
     [self defaultScrollViewSetup];
     
+    _coverView = [[UIViewHitTestOverride alloc] init];
+    _coverView.translatesAutoresizingMaskIntoConstraints = NO;
+    _coverView.scrollView = _scrollView;
+    [self.view addSubview:_coverView];
+    
     [_scrollView setPagingEnabled:YES];
     [_scrollView setDelegate:self];
     [_scrollView setClipsToBounds:NO];
     [_scrollView setAutoresizesSubviews:NO];
     [self defaultScrollViewSetup];
-    [_scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.view addSubview:_scrollView];
+//    [_scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [_scrollView setFrame:self.view.frame];
+    [_coverView addSubview:_scrollView];
     
     _minimalBar.mMinimalBarDelegate = self;
     _minimalBar.displayOverviewYCoord = self.view.frame.size.height - (self.view.frame.size.height/overviewScreenDimensionMultiplyer) + 64;
     _minimalBar.screenHeight = self.view.frame.size.height;
     _minimalBar.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:_minimalBar];
+    
+    self.touchableViewCover = [[UIView alloc] init];
 
     [self.view addConstraints:[self defaultConstraints]];
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -73,16 +80,16 @@ static CGFloat overviewScreenDimensionMultiplyer = 3.5f;
     NSMutableArray* constraints = [[NSMutableArray alloc] init];
     
     [constraints addObjectsFromArray:
-     [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_scrollView]|"
+     [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_coverView]|"
                                           options:0
                                           metrics:0
-                                            views:NSDictionaryOfVariableBindings(_scrollView)]];
+                                            views:NSDictionaryOfVariableBindings(_coverView)]];
 
     [constraints addObjectsFromArray:
-     [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_scrollView]|"
+     [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_coverView]|"
                                           options:0
                                           metrics:0
-                                            views:NSDictionaryOfVariableBindings(_scrollView)]];
+                                            views:NSDictionaryOfVariableBindings(_coverView)]];
 
     [constraints addObjectsFromArray:
      [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_minimalBar]|"
@@ -183,18 +190,21 @@ static CGFloat overviewScreenDimensionMultiplyer = 3.5f;
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
-    void (^animation)(void) = ^{
-        CATransform3D transform = CATransform3DIdentity;
-        transform.m34 = 1.0 / -4000;
-        transform = CATransform3DTranslate(transform, 0, 0, -500);
-        _scrollView.layer.transform = transform;
-    };
-    
-    [UIView animateWithDuration:.2f animations:animation completion:^(BOOL finished) {
-        NSLog(@"Check");
-    }];
+    [self sendViewsToBackPosition:YES];
     
     [_scrollView setUserInteractionEnabled:YES];
+    
+//    self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width), self.scrollView.contentSize.height);
+    
+    [self.scrollView.subviews enumerateObjectsUsingBlock:^(UIView* view, NSUInteger idx, BOOL *stop) {
+        UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectedView:)];
+        [view addGestureRecognizer:tap];
+        
+        view.frame = CGRectMake(view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
+    }];
+    
+
+    
     
     /*
     CGFloat widthReduction = (self.view.frame.size.width/overviewScreenDimensionMultiplyer);
@@ -250,8 +260,9 @@ static CGFloat overviewScreenDimensionMultiplyer = 3.5f;
 
 #pragma Mark End Delegate
 
-
 -(void)selectedView:(UITapGestureRecognizer*)tap{
+    
+    [self sendViewsToBackPosition:NO];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
@@ -290,7 +301,39 @@ static CGFloat overviewScreenDimensionMultiplyer = 3.5f;
     }];
 }
 
+#pragma Mark ScrollView Depth Toggle
+-(void)sendViewsToBackPosition:(BOOL)sendBack{
+        
+    void (^scrollViewAnimation)(void) = ^{
+        CATransform3D transform = CATransform3DIdentity;
+        transform.m34 = 1.0f / -500.f;
+        CGFloat zPos = -400.f * (CGFloat)sendBack;
+        transform = CATransform3DTranslate(transform, 0.f, 0.f, zPos);
+        _scrollView.layer.transform = transform;
+    };
+    
+    [UIView animateWithDuration:.2f animations:scrollViewAnimation];
+//
+    void (^viewControllerAnimation)(void) = ^{
+        [_scrollView.subviews enumerateObjectsUsingBlock:^(UIView* view, NSUInteger idx, BOOL *stop) {
+            CGFloat scaleAmount = sendBack ? .9f : 1.f;
+            view.transform = CGAffineTransformScale(_viewControllertransform, scaleAmount, scaleAmount);
+        }];
+    };
+    
+    [UIView animateWithDuration:.2f animations:viewControllerAnimation];
+}
+
+#pragma ScrollView Delegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    CGFloat contentOffSet = scrollView.contentOffset.x;
+    [_minimalBar scrollOverviewButtonsWithPercentage:contentOffSet/_coverView.frame.size.width];
+}
+
 #pragma End Display/Overview Methods
+
+
 
 #pragma Mark Setup Methods
 
@@ -310,8 +353,9 @@ static CGFloat overviewScreenDimensionMultiplyer = 3.5f;
     }
     
     [_viewControllers enumerateObjectsUsingBlock:^(UIViewController* viewController, NSUInteger idx, BOOL *stop) {
-        viewController.view.frame = CGRectMake(self.view.frame.size.width * idx, 0, self.view.frame.size.width - 40, self.view.frame.size.height);
+        viewController.view.frame = CGRectMake(self.view.frame.size.width * idx, 0, self.view.frame.size.width, self.view.frame.size.height);
         viewController.view.tag = idx;
+        _viewControllertransform = viewController.view.transform;
         [self.scrollView addSubview:viewController.view];
     }];
     

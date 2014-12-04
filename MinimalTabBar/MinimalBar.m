@@ -200,7 +200,7 @@ typedef enum : NSUInteger {
 // To DO optional dropshadow
 -(void)createSelectedStyleForButton:(MinimalBarButton*)mbButton{
     [self addShadowTo:mbButton];
-    [self bringSubviewToFront:mbButton];
+
 }
 
 - (void)collapseAllButtons{
@@ -466,7 +466,7 @@ typedef enum : NSUInteger {
 
 -(void)selectedButtonAtIndex:(NSInteger)index{
     [self.buttons[index] setButtonState:ButtonStateSelected];
-    [self createSelectedStyleForButton:self.buttons[index]];
+    [self bringSubviewToFront:self.buttons[index]];
 }
 
 #pragma Mark Touch And Hold
@@ -474,14 +474,9 @@ typedef enum : NSUInteger {
 - (void) touchAndHold:(UIGestureRecognizer*)longPressGesture{
     if (!self.isDisplayingAll) {
         [self.mMinimalBarDelegate displayAllScreensWithStartingDisplayOn:[self indexOfActiveButton]];
-        [self showAllButtonsInOverViewMode];
+        [self positionAllButtonsForOverView];
         self.isDisplayingAll = YES;
     }
-}
-
-
--(void)showAllButtonsInOverViewMode{
-    [self positionAllButtonsForOverView];
 }
 
 
@@ -547,8 +542,11 @@ typedef enum : NSUInteger {
 }
 
 -(void)scrollOverviewButtonsWithPercentage:(CGFloat)offsetPercentage{
+    
+    NSLog(@"offset : %f", offsetPercentage);
+    
     if (self.isDisplayingAll) {
-        CGFloat squareButtonDimension = self.frame.size.width/5.f;
+        CGFloat squareButtonDimension = self.frame.size.width/self.buttons.count;
         CGFloat defaultPosition = (self.frame.size.width - squareButtonDimension)/2;
         CGFloat offsetAmount = offsetPercentage * (squareButtonDimension + 10);
         

@@ -14,6 +14,7 @@
 		2937ED8A1A1D3BDF0059461B /* MinimalTabBarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED891A1D3BDF0059461B /* MinimalTabBarTests.m */; };
 		2937ED9C1A1D3E0C0059461B /* UIMinimalBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED9B1A1D3E0C0059461B /* UIMinimalBarController.m */; };
 		2937ED9F1A1D6C7F0059461B /* MinimalBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED9E1A1D6C7F0059461B /* MinimalBar.m */; };
+		29775B591A2FBB47007C81F9 /* UIViewHitTestOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 29775B581A2FBB47007C81F9 /* UIViewHitTestOverride.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,8 @@
 		2937ED9B1A1D3E0C0059461B /* UIMinimalBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMinimalBarController.m; sourceTree = "<group>"; };
 		2937ED9D1A1D6C7F0059461B /* MinimalBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinimalBar.h; sourceTree = "<group>"; };
 		2937ED9E1A1D6C7F0059461B /* MinimalBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinimalBar.m; sourceTree = "<group>"; };
+		29775B571A2FBB47007C81F9 /* UIViewHitTestOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewHitTestOverride.h; sourceTree = "<group>"; };
+		29775B581A2FBB47007C81F9 /* UIViewHitTestOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewHitTestOverride.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +130,8 @@
 				2937ED9B1A1D3E0C0059461B /* UIMinimalBarController.m */,
 				2937ED9D1A1D6C7F0059461B /* MinimalBar.h */,
 				2937ED9E1A1D6C7F0059461B /* MinimalBar.m */,
+				29775B571A2FBB47007C81F9 /* UIViewHitTestOverride.h */,
+				29775B581A2FBB47007C81F9 /* UIViewHitTestOverride.m */,
 			);
 			name = Minimal_Tabbar;
 			sourceTree = "<group>";
@@ -231,6 +236,7 @@
 			files = (
 				2937ED761A1D3BDF0059461B /* ViewController.m in Sources */,
 				2937ED9F1A1D6C7F0059461B /* MinimalBar.m in Sources */,
+				29775B591A2FBB47007C81F9 /* UIViewHitTestOverride.m in Sources */,
 				2937ED731A1D3BDF0059461B /* AppDelegate.m in Sources */,
 				2937ED701A1D3BDF0059461B /* main.m in Sources */,
 				2937ED9C1A1D3E0C0059461B /* UIMinimalBarController.m in Sources */,
@@ -339,8 +345,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MinimalTabBar/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "15c091df-a328-4d92-b6a9-2c52041ec1c0";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -349,8 +358,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MinimalTabBar/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "15c091df-a328-4d92-b6a9-2c52041ec1c0";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
