@@ -21,10 +21,6 @@ typedef enum : NSUInteger {
 @implementation MinimalBarButton
 @end
 
-static CGFloat displayYCoord = 15;
-static CGFloat cornerRadius = 7.0f;
-
-
 
 @interface MinimalBar()
 
@@ -45,7 +41,6 @@ static CGFloat cornerRadius = 7.0f;
 @property(nonatomic, strong) NSLayoutConstraint *constraintFive;
 @property(nonatomic, strong) NSLayoutConstraint *bottomPosition;
 
-@property(nonatomic, strong) UIPanGestureRecognizer* panGesture;
 @property(nonatomic) BOOL isDisplayingAll;
 
 
@@ -151,13 +146,13 @@ typedef enum : NSUInteger {
         
         [mbButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchedTab:)];
-        self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panSelectedButton:)];
-        self.panGesture.delegate = self;
+        UIPanGestureRecognizer* pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panSelectedButton:)];
+        pan.delegate = self;
         
         UILongPressGestureRecognizer* longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(touchAndHold:)];
         
         [mbButton addGestureRecognizer:tap];
-        [mbButton addGestureRecognizer:self.panGesture];
+        [mbButton addGestureRecognizer:pan];
         [mbButton addGestureRecognizer:longPress];
         
         mbButton.backgroundColor = [UIColor whiteColor];
@@ -169,62 +164,39 @@ typedef enum : NSUInteger {
 // TO DO figure out default toggle mode
 -(void)defaultToShopPressed{
     [self.buttons[0] setButtonState:ButtonStateSelected];
-    [self createSelectedStyleForButton:self.buttons[0]];
     [self collapseAllButtons];
-    [self.mMinimalBarDelegate fadeToIndex:[self.buttons[0] tag]];
+    [self.mMinimalBarDelegate changeToPageIndex:[self.buttons[0] tag]];
 }
 
 - (void)touchedTab:(id)sender {
-    
-    MinimalBarButton* mbButton = (MinimalBarButton*)[sender view];
-    
-    switch ([mbButton buttonState]) {
-        case ButtonStateDisplayed:
-            [mbButton setButtonState:ButtonStateSelected];
-            
-//            ToDo
-//            [self createSelectedStyleForButton:mbButton];
-            [self collapseAllButtons];
-            [self.mMinimalBarDelegate fadeToIndex:mbButton.tag];
-            break;
-            
-        case ButtonStateSelected:
-            [self displayAllButtons];
-            break;
-            
-        default:
-            break;
+    if (!self.isDisplayingAll) {
+        MinimalBarButton* mbButton = (MinimalBarButton*)[sender view];
+        
+        switch ([mbButton buttonState]) {
+            case ButtonStateDisplayed:
+                [mbButton setButtonState:ButtonStateSelected];
+                [self collapseAllButtons];
+                [self.mMinimalBarDelegate changeToPageIndex:mbButton.tag];
+                break;
+                
+            case ButtonStateSelected:
+                [self displayAllButtons];
+                break;
+                
+            default:
+                break;
+        }
     }
-}
-
-// To DO optional dropshadow
--(void)createSelectedStyleForButton:(MinimalBarButton*)mbButton{
-    [self addShadowTo:mbButton];
-
 }
 
 - (void)collapseAllButtons{
     
-    self.panGesture.enabled = YES;
-    
-//    [self.mMinimalBarDelegate lightenScreen];
-    
+    [self shouldEnablePanGestures:YES];
     void (^alphaAnimation)() = ^{
         [self hideNonSelectedMenuItems];
     };
     
     [self.buttons enumerateObjectsUsingBlock:^(MinimalBarButton *mbButton, NSUInteger idx, BOOL *stop) {
-
-//        ToDo Menu Items
-
-//        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"cornerRadius"];
-//        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-//        animation.fromValue = [NSNumber numberWithFloat:0.0f];
-//        animation.toValue = [NSNumber numberWithFloat:cornerRadius];
-//        animation.duration = .17;
-//        [mbButton.layer addAnimation:animation forKey:@"cornerRadius"];
-//        [mbButton.layer setCornerRadius:cornerRadius];
-        
         [mbButton setImage:[UIImage imageNamed:@"menu_icon"] forState:UIControlStateNormal];
         [mbButton setSelected:NO];
     }];
@@ -237,20 +209,6 @@ typedef enum : NSUInteger {
         [self.adjustableButtonConstaints enumerateObjectsUsingBlock:^(NSLayoutConstraint* constraint, NSUInteger idx, BOOL *stop) {
             constraint.constant = mbButtonWidth * (self.adjustableButtonConstaints.count/2);
         }];
-        
-//        self.constraintOne.constant = buttonWidth * 1;
-//        self.constraintTwo.constant = buttonWidth * 1.5;
-//        self.constraintThree.constant = buttonWidth * 2;
-//        self.constraintFour.constant = buttonWidth * 2.5;
-//        self.constraintFive.constant = buttonWidth * 3;
-        
-//        self.frame = CGRectMake(0, (self.screenHeight-60) - displayYCoord, self.defaultFrameSize.width, 60);
-        
-//        [self.adjustableButtonConstaints enumerateObjectsUsingBlock:^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
-//            if ([(MenuButton*)constraint.firstItem isEqual:self.buttons[[self indexOfActiveButton]]]) {
-//                constraint.constant = buttonWidth * 2;
-//            }
-//        }];
         
         [self layoutIfNeeded];
     };
@@ -274,13 +232,12 @@ typedef enum : NSUInteger {
 }
 
 - (void)displayAllButtons{
-    
-    self.panGesture.enabled = NO;
-    
-    void (^animations)(void) = ^{};
-    animations = ^{
+    [self shouldEnablePanGestures:NO];
+    void (^alphaAnimations)(void) = ^{
         [self showAllButtons];
-        
+    };
+    
+    void (^movementAnimations)(void) = ^{
         [self.adjustableButtonConstaints enumerateObjectsUsingBlock:^(NSLayoutConstraint* constraint, NSUInteger idx, BOOL *stop) {
             constraint.constant = self.frame.size.width/self.adjustableButtonConstaints.count * idx;
         }];
@@ -289,12 +246,18 @@ typedef enum : NSUInteger {
         [self layoutIfNeeded];
     };
     
-    [UIView animateWithDuration:.25f
+    [UIView animateWithDuration:.5f
                           delay:0.f
-         usingSpringWithDamping:.98
-          initialSpringVelocity:14
+         usingSpringWithDamping:50.f
+          initialSpringVelocity:15.f
                         options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
-                     animations:animations
+                     animations:movementAnimations
+                     completion:^(BOOL finished) {}];
+    
+    [UIView animateWithDuration:.3f
+                          delay:.1f
+                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction
+                     animations:alphaAnimations
                      completion:^(BOOL finished) {}];
 }
 
@@ -309,11 +272,7 @@ typedef enum : NSUInteger {
         self.firstY = [[gesture view] center].y;
     }
     
-    NSInteger activeIndex = [self indexOfActiveButton];
-    
     //Matching swipe with scrollview
-
-    
     [self.mMinimalBarDelegate manualOffsetScrollview:(self.lastXOffset - translatedPoint.x)];
     self.lastXOffset = translatedPoint.x;
     
@@ -354,11 +313,6 @@ typedef enum : NSUInteger {
         MinimalBarButton* activeButton = self.buttons[activeIndex];
         MinimalBarButton* nextButton = self.buttons[activeIndex+indextAdjustment];
         
-//        [self removeBorderToView:activeButton];
-//        [self addBorderToView:nextButton];
-//        [self removeShadowFrom:activeButton];
-//        [self addShadowTo:nextButton];
-        
         nextButton.backgroundColor = [UIColor whiteColor];
         activeButton.backgroundColor = [UIColor clearColor];
         
@@ -391,10 +345,7 @@ typedef enum : NSUInteger {
 -(void)showAllButtons{
     [self.buttons enumerateObjectsUsingBlock:^(MinimalBarButton* mbButton, NSUInteger idx, BOOL *stop) {
         mbButton.buttonState = ButtonStateDisplayed;
-        [mbButton.layer setCornerRadius:0.f];
         mbButton.backgroundColor = [UIColor whiteColor];
-        //        [self removeBorderToView:button];
-        [self removeShadowFrom:mbButton];
         mbButton.alpha = 1.f;
         
         [mbButton setImage:nil forState:UIControlStateNormal];
@@ -411,41 +362,14 @@ typedef enum : NSUInteger {
     }];
 }
 
--(void)addBorderToView:(UIView*)view{
-    
-    if (view.tag == 1 || view.tag == 3) {
-        [(UIButton*)view setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        view.layer.borderColor = [[UIColor whiteColor] CGColor];
-        view.layer.borderWidth = 2.f;
-    }else{
-        [(UIButton*)view setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        view.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-        view.layer.borderWidth = 2.f;
-    }
-}
-
--(void)removeBorderToView:(UIView*)view{
-    [(UIButton*)view setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    view.layer.borderColor = [[UIColor clearColor] CGColor];
-    view.layer.borderWidth = 0.f;
-}
-
-
--(void)addShadowTo:(UIView*)view{
-    view.alpha = 1;
-    view.backgroundColor = [UIColor whiteColor];
-    view.layer.shadowColor = [[UIColor blackColor] CGColor];
-    view.layer.shadowOffset = CGSizeMake(0.f, 2.0f);
-    view.layer.shadowRadius = 3.0f;
-    view.layer.shadowOpacity = .4f;
-}
-
--(void)removeShadowFrom:(UIView*)view{
-    view.backgroundColor = [UIColor whiteColor];
-    view.layer.shadowColor = [[UIColor blackColor] CGColor];
-    view.layer.shadowOffset = CGSizeMake(0.f, 1.0f);
-    view.layer.shadowRadius = 0.f;
-    view.layer.shadowOpacity = 0.f;
+-(void)shouldEnablePanGestures:(BOOL)enable{
+    [self.buttons enumerateObjectsUsingBlock:^(MinimalBarButton* mbButton, NSUInteger idx, BOOL *stop) {
+        [mbButton.gestureRecognizers enumerateObjectsUsingBlock:^(UIGestureRecognizer* gesture, NSUInteger idx, BOOL *stop) {
+            if ([gesture isKindOfClass:[UIPanGestureRecognizer class]]) {
+                gesture.enabled = enable;
+            }
+        }];
+    }];
 }
 
 -(NSUInteger)indexOfActiveButton{
@@ -482,7 +406,7 @@ typedef enum : NSUInteger {
 
 - (void)positionAllButtonsForOverView{
     
-    self.panGesture.enabled = NO;
+    [self shouldEnablePanGestures:NO];
     
     CGFloat spacingMultiplyer = ([self indexOfActiveButton] * 10);
     CGFloat defaultPosition = (self.frame.size.width - (self.frame.size.width/5))/2;
@@ -502,12 +426,6 @@ typedef enum : NSUInteger {
             constraint.constant = (self.frame.size.width/self.adjustableButtonConstaints.count * idx) + (idx * 10);
         }];
         
-//        self.constraintOne.constant = self.frame.size.width/5 * 0;
-//        self.constraintTwo.constant = self.frame.size.width/5 * 1 + 10;
-//        self.constraintThree.constant = self.frame.size.width/5 * 2 + 20;
-//        self.constraintFour.constant = self.frame.size.width/5 * 3 + 30;
-//        self.constraintFive.constant = self.frame.size.width/5 * 4 + 40;
-        
         self.frame = CGRectMake(xPosToScrollButtonsTo, self.displayOverviewYCoord + ((heightUnderScreens - squareButtonDimension)/2), self.frame.size.width, squareButtonDimension);
         [self layoutIfNeeded];
     };
@@ -524,10 +442,10 @@ typedef enum : NSUInteger {
 }
 
 -(void)returnMenuToSelected:(NSUInteger)index{
+    _isDisplayingAll = NO;
+    
     [self selectedButtonAtIndex:index];
     [self collapseAllButtons];
-    self.isDisplayingAll = NO;
-    //    self.frame = CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
 }
 
 -(void)showAllButtonsInOverviewMode{
@@ -535,15 +453,12 @@ typedef enum : NSUInteger {
         mbButton.buttonState = ButtonStateDisplayed;
         mbButton.backgroundColor = [UIColor whiteColor];
         mbButton.alpha = 1.f;
-        
         [mbButton setImage:nil forState:UIControlStateNormal];
         [mbButton setSelected:YES];
     }];
 }
 
 -(void)scrollOverviewButtonsWithPercentage:(CGFloat)offsetPercentage{
-    
-    NSLog(@"offset : %f", offsetPercentage);
     
     if (self.isDisplayingAll) {
         CGFloat squareButtonDimension = self.frame.size.width/self.buttons.count;

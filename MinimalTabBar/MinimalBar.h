@@ -10,10 +10,8 @@
 
 @protocol MinimalBarDelegate <NSObject>
 -(void)didSwitchToIndex:(NSUInteger)pageIndex;
--(void)fadeToIndex:(NSUInteger)pageIndex;
+-(void)changeToPageIndex:(NSUInteger)pageIndex;
 -(void)manualOffsetScrollview:(CGFloat)offset;
--(void)darkenScreen;
--(void)lightenScreen;
 -(void)displayAllScreensWithStartingDisplayOn:(CGFloat)startingPosition;
 -(void)sendScrollViewToPoint:(CGPoint)point;
 @end
