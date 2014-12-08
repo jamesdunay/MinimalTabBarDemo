@@ -11,9 +11,8 @@
 
 @interface UIMinimalBarController : UIViewController <MinimalBarDelegate, UIScrollViewDelegate>
 
-@property(nonatomic, strong) NSArray * viewControllers;
-@property(nonatomic, strong) MinimalBar * minimalBar;
-
-- (void)setViewControllers:( NSArray * )viewControllers;
+@property (nonatomic, strong) NSArray *sections;
+@property (nonatomic, strong) MinimalBar *minimalBar;
+@property (nonatomic, strong) UIColor *tintColor;
 
 @end

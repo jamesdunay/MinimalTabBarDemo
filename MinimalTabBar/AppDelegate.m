@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "UIMinimalBarController.h"
+#import "MinimalSection.h"
 
 @interface AppDelegate ()
 
@@ -20,16 +21,22 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
     
     UIMinimalBarController* minimalTabBarViewController = [[UIMinimalBarController alloc] init];
     
-    UIViewController* redVC = [[UIViewController alloc] init];
-    redVC.view.backgroundColor = [UIColor redColor];
+    UIImageView* sectionOneBackground = [[UIImageView alloc]initWithFrame:self.window.frame];
+    [sectionOneBackground setImage:[UIImage imageNamed:@"mb_1"]];
     
-    UIViewController* greenVC = [[UIViewController alloc] init];
-    greenVC.view.backgroundColor = [UIColor greenColor];
+    UIImageView* sectionTwoBackground = [[UIImageView alloc]initWithFrame:self.window.frame];
+    [sectionTwoBackground setImage:[UIImage imageNamed:@"mb_2"]];
+    
+    UIViewController* sectionOneVC = [[UIViewController alloc] init];
+    [sectionOneVC.view addSubview:sectionOneBackground];
+    
+    UIViewController* sectionTwoVC = [[UIViewController alloc] init];
+    [sectionTwoVC.view addSubview:sectionTwoBackground];
     
     UIViewController* blueVC = [[UIViewController alloc] init];
     blueVC.view.backgroundColor = [UIColor blueColor];
@@ -42,7 +49,14 @@
 
     [self.window setRootViewController:minimalTabBarViewController];
 
-    [minimalTabBarViewController setViewControllers:@[redVC, greenVC, blueVC, yellowVC, orangeVC]];
+    //Currently Broken with 2 sections
+    MinimalSection* tabOne = [[MinimalSection alloc] initWithViewController:sectionOneVC tabImage:[UIImage imageNamed:@"icon_1"] andTitle:@"HOME"];
+    MinimalSection* tabTwo = [[MinimalSection alloc] initWithViewController:sectionTwoVC tabImage:[UIImage imageNamed:@"icon_2"] andTitle:@"LOCATION"];
+    MinimalSection* tabThree = [[MinimalSection alloc] initWithViewController:blueVC tabImage:[UIImage imageNamed:@"icon_3"] andTitle:@"SPEAK"];
+    MinimalSection* tabFour = [[MinimalSection alloc] initWithViewController:yellowVC tabImage:[UIImage imageNamed:@"icon_4"] andTitle:@"LEVELS"];
+    MinimalSection* tabFive = [[MinimalSection alloc] initWithViewController:orangeVC tabImage:[UIImage imageNamed:@"icon_5"] andTitle:@"SOUNDS"];
+    minimalTabBarViewController.tintColor = [UIColor greenColor];
+    [minimalTabBarViewController setSections:@[tabOne, tabTwo, tabThree, tabFour, tabFive]];
     
     return YES;
 }
