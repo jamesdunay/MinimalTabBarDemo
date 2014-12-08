@@ -9,26 +9,27 @@
 #import <UIKit/UIKit.h>
 
 @protocol MinimalBarDelegate <NSObject>
--(void)didSwitchToIndex:(NSUInteger)pageIndex;
--(void)fadeToIndex:(NSUInteger)pageIndex;
--(void)manualOffsetScrollview:(CGFloat)offset;
--(void)darkenScreen;
--(void)lightenScreen;
--(void)displayAllScreensWithStartingDisplayOn:(CGFloat)startingPosition;
--(void)sendScrollViewToPoint:(CGPoint)point;
+
+- (void)didSwitchToIndex:(NSUInteger)pageIndex;
+- (void)changeToPageIndex:(NSUInteger)pageIndex;
+- (void)manualOffsetScrollview:(CGFloat)offset;
+- (void)displayAllScreensWithStartingDisplayOn:(CGFloat)startingPosition;
+- (void)sendScrollViewToPoint:(CGPoint)point;
+
 @end
+
+
 
 @interface MinimalBar : UIView <UIGestureRecognizerDelegate>
 
-@property(nonatomic) id <MinimalBarDelegate> mMinimalBarDelegate;
-@property(nonatomic) CGFloat displayOverviewYCoord;
-@property(nonatomic) CGFloat screenHeight;
-@property(nonatomic) CGSize defaultFrameSize;
+@property (nonatomic) id <MinimalBarDelegate> mMinimalBarDelegate;
+@property (nonatomic) CGFloat displayOverviewYCoord;
+@property (nonatomic) CGFloat screenHeight;
+@property (nonatomic) CGSize defaultFrameSize;
+@property (nonatomic, strong) UIColor* tintColor;
 
--(void)scrollOverviewButtonsWithPercentage:(CGFloat)offsetPercentage;
--(void)returnMenuToSelected:(NSUInteger)index;
--(void)defaultToShopPressed;
-
-- (void)createMenuItems:(NSArray*)viewControllers;
+- (void)scrollOverviewButtonsWithPercentage:(CGFloat)offsetPercentage;
+- (void)returnMenuToSelected:(NSUInteger)index;
+- (void)createMenuItems:(NSArray *)viewControllers;
 
 @end
