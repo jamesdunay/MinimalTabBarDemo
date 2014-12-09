@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "UIMinimalBarController.h"
-#import "MinimalSection.h"
+
 
 @interface AppDelegate ()
 
@@ -17,47 +17,73 @@
 @implementation AppDelegate
 
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
     
-    UIMinimalBarController* minimalTabBarViewController = [[UIMinimalBarController alloc] init];
+    UIMinimalBarController *minimalTabBarViewController = [[UIMinimalBarController alloc] init];
     
-    UIImageView* sectionOneBackground = [[UIImageView alloc]initWithFrame:self.window.frame];
+    UIImageView *sectionOneBackground = [[UIImageView alloc]initWithFrame:self.window.frame];
     [sectionOneBackground setImage:[UIImage imageNamed:@"mb_1"]];
     
-    UIImageView* sectionTwoBackground = [[UIImageView alloc]initWithFrame:self.window.frame];
+    UIImageView *sectionTwoBackground = [[UIImageView alloc]initWithFrame:self.window.frame];
     [sectionTwoBackground setImage:[UIImage imageNamed:@"mb_2"]];
     
-    UIViewController* sectionOneVC = [[UIViewController alloc] init];
+    UIImageView *sectionThreeBackground = [[UIImageView alloc]initWithFrame:self.window.frame];
+    [sectionThreeBackground setImage:[UIImage imageNamed:@"mb_3"]];
+    
+    UIImageView *sectionFourBackground = [[UIImageView alloc]initWithFrame:self.window.frame];
+    [sectionFourBackground setImage:[UIImage imageNamed:@"mb_4"]];
+    
+    UIImageView *sectionFiveBackground = [[UIImageView alloc]initWithFrame:self.window.frame];
+    [sectionFiveBackground setImage:[UIImage imageNamed:@"mb_5"]];
+    
+    UITabBarItem* tabBarItemOne = [[UITabBarItem alloc] initWithTitle:@"HOME" image:[UIImage imageNamed:@"icon_1"] selectedImage:[UIImage imageNamed:@"icon_menu"]];
+    UITabBarItem* tabBarItemTwo = [[UITabBarItem alloc] initWithTitle:@"LOCATION" image:[UIImage imageNamed:@"icon_2"] selectedImage:[UIImage imageNamed:@"icon_menu"]];
+    UITabBarItem* tabBarItemThree = [[UITabBarItem alloc] initWithTitle:@"SPEAK" image:[UIImage imageNamed:@"icon_3"] selectedImage:[UIImage imageNamed:@"icon_menu"]];
+    UITabBarItem* tabBarItemFour = [[UITabBarItem alloc] initWithTitle:@"LEVELS" image:[UIImage imageNamed:@"icon_4"] selectedImage:[UIImage imageNamed:@"icon_menu"]];
+    UITabBarItem* tabBarItemFive = [[UITabBarItem alloc] initWithTitle:@"SOUNDS" image:[UIImage imageNamed:@"icon_5"] selectedImage:[UIImage imageNamed:@"icon_menu"]];
+    
+
+    
+    UIViewController *sectionOneVC = [[UIViewController alloc] init];
+    sectionOneVC.tabBarItem = tabBarItemOne;
     [sectionOneVC.view addSubview:sectionOneBackground];
     
-    UIViewController* sectionTwoVC = [[UIViewController alloc] init];
+    UIViewController *sectionTwoVC = [[UIViewController alloc] init];
+    sectionTwoVC.tabBarItem = tabBarItemTwo;
     [sectionTwoVC.view addSubview:sectionTwoBackground];
-    
-    UIViewController* blueVC = [[UIViewController alloc] init];
-    blueVC.view.backgroundColor = [UIColor blueColor];
-    
-    UIViewController* yellowVC = [[UIViewController alloc] init];
-    yellowVC.view.backgroundColor = [UIColor yellowColor];
-    
-    UIViewController* orangeVC = [[UIViewController alloc] init];
-    orangeVC.view.backgroundColor = [UIColor orangeColor];
 
+    UIViewController *sectionThreeVC = [[UIViewController alloc] init];
+    sectionThreeVC.tabBarItem = tabBarItemThree;
+    [sectionThreeVC.view addSubview:sectionThreeBackground];
+    
+    UIViewController *sectionFourVC = [[UIViewController alloc] init];
+    sectionFourVC.tabBarItem = tabBarItemFour;
+    [sectionFourVC.view addSubview:sectionFourBackground];
+    
+    UIViewController *sectionFiveVC = [[UIViewController alloc] init];
+    sectionFiveVC.tabBarItem = tabBarItemFive;
+    [sectionFiveVC.view addSubview:sectionFiveBackground];
+    
     [self.window setRootViewController:minimalTabBarViewController];
 
-    //Currently Broken with 2 sections
-    MinimalSection* tabOne = [[MinimalSection alloc] initWithViewController:sectionOneVC tabImage:[UIImage imageNamed:@"icon_1"] andTitle:@"HOME"];
-    MinimalSection* tabTwo = [[MinimalSection alloc] initWithViewController:sectionTwoVC tabImage:[UIImage imageNamed:@"icon_2"] andTitle:@"LOCATION"];
-    MinimalSection* tabThree = [[MinimalSection alloc] initWithViewController:blueVC tabImage:[UIImage imageNamed:@"icon_3"] andTitle:@"SPEAK"];
-    MinimalSection* tabFour = [[MinimalSection alloc] initWithViewController:yellowVC tabImage:[UIImage imageNamed:@"icon_4"] andTitle:@"LEVELS"];
-    MinimalSection* tabFive = [[MinimalSection alloc] initWithViewController:orangeVC tabImage:[UIImage imageNamed:@"icon_5"] andTitle:@"SOUNDS"];
-    minimalTabBarViewController.tintColor = [UIColor greenColor];
-    [minimalTabBarViewController setSections:@[tabOne, tabTwo, tabThree, tabFour, tabFive]];
+    // Highlight selected section -- DONE
+    // Toggle Titles -- DONE
+    // Main menu icon or logo -- DONE
+    // Navigation controller check -- DONE
+    // Landscape view
+    // Menu Icon
+
     
+    minimalTabBarViewController.defaultTintColor = [UIColor whiteColor];
+    minimalTabBarViewController.selectedTintColor = [UIColor redColor];
+    minimalTabBarViewController.showTitles = NO;
+    
+    [minimalTabBarViewController setViewControllers:@[sectionOneVC, sectionTwoVC, sectionThreeVC, sectionFourVC, sectionFiveVC]];
+
     return YES;
 }
 

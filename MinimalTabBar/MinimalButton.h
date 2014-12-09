@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MinimalSection.h"
 
 typedef enum : NSUInteger {
     ButtonStateDisplayedInactive = (1 << 0),
@@ -15,10 +14,17 @@ typedef enum : NSUInteger {
     ButtonStateDisplayedActive = (1 << 2)
 } ButtonState;
 
+
+
 @interface MinimalButton : UIButton
-@property (nonatomic) UILabel* title;
+
 @property (nonatomic) ButtonState buttonState;
 
--(id)initWithButtonWithSection:(MinimalSection*)section;
+@property (nonatomic, strong) UIColor* selectedTintColor;
+@property (nonatomic, strong) UIColor* defaultTintColor;
+@property (nonatomic) UILabel* title;
+@property (nonatomic) BOOL showTitle;
+
+-(id)initWithButtonWithTabBarItem:(UITabBarItem*)tabBarItem;
 
 @end

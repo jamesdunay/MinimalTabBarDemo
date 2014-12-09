@@ -26,10 +26,13 @@
 @property (nonatomic) CGFloat displayOverviewYCoord;
 @property (nonatomic) CGFloat screenHeight;
 @property (nonatomic) CGSize defaultFrameSize;
-@property (nonatomic, strong) UIColor* tintColor;
+@property (nonatomic, strong) UIColor* defaultTintColor;
+@property (nonatomic, strong) UIColor* selectedTintColor;
+@property (nonatomic) BOOL showTitles;
 
 - (void)scrollOverviewButtonsWithPercentage:(CGFloat)offsetPercentage;
 - (void)returnMenuToSelected:(NSUInteger)index;
 - (void)createMenuItems:(NSArray *)viewControllers;
+
 
 @end
