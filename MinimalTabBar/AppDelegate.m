@@ -77,14 +77,14 @@
     // Hide titles when selected toggle -- DONE
     
     // Landscape view
-    // GIF
-    // Cocoapod
+    // GIF -- Quicktime, or
+    // Cocoapod -- http://blog.grio.com/2014/11/creating-a-private-cocoapod.html?utm_source=TapFame&utm_campaign=TapFame+newsletter&utm_medium=email
     
     minimalTabBarViewController.minimalBar.defaultTintColor = [UIColor whiteColor];
-    minimalTabBarViewController.minimalBar.selectedTintColor = [UIColor redColor];
+    minimalTabBarViewController.minimalBar.selectedTintColor = [UIColor colorWithRed:222.0f/255.f green:157.0f/255.f blue:0.0f/255.f alpha:1.f];
     minimalTabBarViewController.minimalBar.showTitles = YES;
-    minimalTabBarViewController.minimalBar.hidesTitlesWhenSelected = NO;
-    minimalTabBarViewController.minimalBar.backgroundColor = [UIColor blueColor];
+    minimalTabBarViewController.minimalBar.hidesTitlesWhenSelected = YES;
+    minimalTabBarViewController.minimalBar.backgroundColor = [UIColor clearColor];
     [minimalTabBarViewController setViewControllers:@[sectionOneVC, sectionTwoVC, sectionThreeVC, sectionFourVC, sectionFiveVC]];
     
     return YES;
