@@ -87,12 +87,13 @@
         default:
             break;
     }
-    
-//    if (buttonState == ButtonStateDisplayedInactive) {
-//        _title.alpha = .4;
-//    }else{
-//        _title.alpha = 1;
-//    }
+}
+
+-(void)setSelected:(BOOL)selected{
+    [super setSelected:selected];
+    if (_hideTitleWhenSelected) {
+        _title.hidden = selected;
+    }
 }
 
 -(void)setDefaultTintColor:(UIColor *)defaultTintColor{

@@ -48,6 +48,7 @@ typedef enum : NSUInteger {
         mbButton.defaultTintColor = _defaultTintColor;
         mbButton.selectedTintColor = _selectedTintColor;
         mbButton.showTitle = _showTitles;
+        mbButton.hideTitleWhenSelected = _hidesTitlesWhenSelected;
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchedButton:)];
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panSelectedButton:)];
@@ -250,7 +251,12 @@ typedef enum : NSUInteger {
     }];
 }
 
-
+-(void)setHidesTitlesWhenSelected:(BOOL)hidesTitlesWhenSelected{
+    _hidesTitlesWhenSelected = hidesTitlesWhenSelected;
+    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+        mbButton.hideTitleWhenSelected = hidesTitlesWhenSelected;
+    }];
+}
 
 #pragma Mark Pan Methods ---
 

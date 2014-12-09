@@ -19,14 +19,11 @@ static CGFloat minimalBarHeight = 70.f;
 @property (nonatomic) CGAffineTransform scrollViewTransform;
 @end
 
-
-
 @implementation UIMinimalBarController
 
 - (id)init {
     self = [super init];
     if (self) {
-        _defaultTintColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -57,8 +54,7 @@ static CGFloat minimalBarHeight = 70.f;
     _minimalBar.mMinimalBarDelegate = self;
     _minimalBar.screenHeight = self.view.frame.size.height;
     _minimalBar.translatesAutoresizingMaskIntoConstraints = NO;
-    _minimalBar.defaultTintColor = _defaultTintColor;
-    _minimalBar.selectedTintColor = _selectedTintColor;
+
     
     [self.view addSubview:_minimalBar];
     
@@ -263,21 +259,6 @@ static CGFloat minimalBarHeight = 70.f;
     
     [self.view addConstraints:[self defaultConstraints]];
     [_minimalBar createMenuItems:_viewControllers];
-}
-
--(void)setDefaultTintColor:(UIColor *)defaultTintColor{
-    _defaultTintColor = defaultTintColor;
-    _minimalBar.defaultTintColor = _defaultTintColor;
-}
-
--(void)setSelectedTintColor:(UIColor *)selectedTintColor{
-    _selectedTintColor = selectedTintColor;
-    _minimalBar.selectedTintColor = _selectedTintColor;
-}
-
--(void)setShowTitles:(BOOL)showTitles{
-    _showTitles = showTitles;
-    [_minimalBar setShowTitles:showTitles];
 }
 
 @end
