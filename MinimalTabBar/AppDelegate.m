@@ -46,8 +46,6 @@
     UITabBarItem* tabBarItemFour = [[UITabBarItem alloc] initWithTitle:@"LEVELS" image:[UIImage imageNamed:@"icon_4"] selectedImage:[UIImage imageNamed:@"icon_menu"]];
     UITabBarItem* tabBarItemFive = [[UITabBarItem alloc] initWithTitle:@"SOUNDS" image:[UIImage imageNamed:@"icon_5"] selectedImage:[UIImage imageNamed:@"icon_menu"]];
     
-
-    
     UIViewController *sectionOneVC = [[UIViewController alloc] init];
     sectionOneVC.tabBarItem = tabBarItemOne;
     [sectionOneVC.view addSubview:sectionOneBackground];
@@ -74,16 +72,21 @@
     // Toggle Titles -- DONE
     // Main menu icon or logo -- DONE
     // Navigation controller check -- DONE
+    // Menu Icon -- DONE
+    // Background Color -- DONE
+    // Hide titles when selected toggle -- DONE
+    
     // Landscape view
-    // Menu Icon
-
+    // GIF
+    // Cocoapod
     
-    minimalTabBarViewController.defaultTintColor = [UIColor whiteColor];
-    minimalTabBarViewController.selectedTintColor = [UIColor redColor];
-    minimalTabBarViewController.showTitles = NO;
-    
+    minimalTabBarViewController.minimalBar.defaultTintColor = [UIColor whiteColor];
+    minimalTabBarViewController.minimalBar.selectedTintColor = [UIColor redColor];
+    minimalTabBarViewController.minimalBar.showTitles = YES;
+    minimalTabBarViewController.minimalBar.hidesTitlesWhenSelected = NO;
+    minimalTabBarViewController.minimalBar.backgroundColor = [UIColor blueColor];
     [minimalTabBarViewController setViewControllers:@[sectionOneVC, sectionTwoVC, sectionThreeVC, sectionFourVC, sectionFiveVC]];
-
+    
     return YES;
 }
 

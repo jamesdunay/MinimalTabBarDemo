@@ -24,6 +24,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) UIColor* defaultTintColor;
 @property (nonatomic) UILabel* title;
 @property (nonatomic) BOOL showTitle;
+@property (nonatomic) BOOL hideTitleWhenSelected;
 
 -(id)initWithButtonWithTabBarItem:(UITabBarItem*)tabBarItem;
 
