@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MinimalTabBar/MinimalBar.m"
-            timestampString = "439669589.812143"
+            filePath = "MinimalTabBar/MinimalButton.m"
+            timestampString = "439799667.062694"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "-defaultConstraints"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "-initWithButtonWithTabBarItem:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

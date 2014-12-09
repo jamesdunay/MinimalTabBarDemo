@@ -7,7 +7,6 @@
 //
 
 #import "MinimalBar.h"
-#import "MinimalSection.h"
 #import "MinimalButton.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -40,13 +39,15 @@ typedef enum : NSUInteger {
 
 #pragma Mark Minimal Bar Buttons ---
 
-- (void)createMenuItems:(NSArray *)sections {
+- (void)createMenuItems:(NSArray *)viewControllers {
     self.buttons = [[NSMutableArray alloc] init];
     
-    [sections enumerateObjectsUsingBlock: ^(MinimalSection *section, NSUInteger idx, BOOL *stop) {
+    [viewControllers enumerateObjectsUsingBlock: ^(UIViewController* viewController, NSUInteger idx, BOOL *stop) {
         
-        MinimalButton *mbButton = [[MinimalButton alloc] initWithButtonWithSection:section];
-        mbButton.tintColor = _tintColor;
+        MinimalButton *mbButton = [[MinimalButton alloc] initWithButtonWithTabBarItem:viewController.tabBarItem];
+        mbButton.defaultTintColor = _defaultTintColor;
+        mbButton.selectedTintColor = _selectedTintColor;
+        mbButton.showTitle = _showTitles;
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchedButton:)];
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panSelectedButton:)];
@@ -65,10 +66,17 @@ typedef enum : NSUInteger {
 
 #pragma mark Tint Color ---
 
--(void)setTintColor:(UIColor *)tintColor{
-    _tintColor = tintColor;
+-(void)setDefaultTintColor:(UIColor *)defaultTintColor{
+    _defaultTintColor = defaultTintColor;
     [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
-        mbButton.tintColor = tintColor;
+        mbButton.tintColor = defaultTintColor;
+    }];
+}
+
+-(void)setSelectedTintColor:(UIColor *)selectedTintColor{
+    _selectedTintColor = selectedTintColor;
+    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+        mbButton.selectedTintColor = selectedTintColor;
     }];
 }
 
@@ -177,9 +185,9 @@ typedef enum : NSUInteger {
     
     [UIView animateWithDuration:.65f
                           delay:0.f
-         usingSpringWithDamping:.85
+         usingSpringWithDamping:85
           initialSpringVelocity:12
-                        options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction
                      animations:animations
                      completion:nil];
     
@@ -193,26 +201,29 @@ typedef enum : NSUInteger {
 - (void)displayAllButtons {
     [self shouldEnablePanGestures:NO];
     
+    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+        if (mbButton.buttonState == ButtonStateSelected)    mbButton.buttonState = ButtonStateDisplayedActive;
+        else                                                mbButton.buttonState = ButtonStateDisplayedInactive;
+    }];
+    
     void (^alphaAnimations)(void) = ^{ [self showAllButtons]; };
     void (^movementAnimations)(void) = ^{
         [self.adjustableButtonConstaints enumerateObjectsUsingBlock: ^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
             constraint.constant = self.frame.size.width / self.adjustableButtonConstaints.count * idx;
         }];
-        
-        self.frame = CGRectMake(0, (self.screenHeight - self.defaultFrameSize.height), self.defaultFrameSize.width, self.defaultFrameSize.height);
         [self layoutIfNeeded];
     };
     
-    [UIView animateWithDuration:.5f
+    [UIView animateWithDuration:.8f
                           delay:0.f
-         usingSpringWithDamping:50.f
-          initialSpringVelocity:15.f
-                        options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+         usingSpringWithDamping:150
+          initialSpringVelocity:16
+                        options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveEaseOut
                      animations:movementAnimations
                      completion:nil];
     
-    [UIView animateWithDuration:.3f
-                          delay:.1f
+    [UIView animateWithDuration:.4f
+                          delay:0.025f
                         options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction
                      animations:alphaAnimations
                      completion:nil];
@@ -220,11 +231,7 @@ typedef enum : NSUInteger {
 
 - (void)showAllButtons {
     [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
-        if (mbButton.buttonState == ButtonStateSelected)    mbButton.buttonState = ButtonStateDisplayedActive;
-        else                                                mbButton.buttonState = ButtonStateDisplayedInactive;
-        
         mbButton.alpha = 1.f;
-        [mbButton setSelected:YES];
     }];
 }
 
@@ -233,6 +240,13 @@ typedef enum : NSUInteger {
         if (mbButton.buttonState != ButtonStateSelected) {
             mbButton.alpha = 0.f;
         }
+    }];
+}
+
+- (void)setShowTitles:(BOOL)showTitles{
+    _showTitles = showTitles;
+    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+        mbButton.showTitle = showTitles;
     }];
 }
 
@@ -328,19 +342,18 @@ typedef enum : NSUInteger {
         [self showAllButtonsInOverviewMode];
     };
     
-    [UIView animateWithDuration:.25f
+    [UIView animateWithDuration:.6f
                           delay:0.f
-         usingSpringWithDamping:.98
-          initialSpringVelocity:11
-                        options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionAllowUserInteraction
+         usingSpringWithDamping:150
+          initialSpringVelocity:15
+                        options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveEaseOut
                      animations:animations
-                     completion: ^(BOOL finished) {
-                     }];
+                     completion:nil];
 }
 
 - (void)showAllButtonsInOverviewMode {
     [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
-        mbButton.buttonState = ButtonStateDisplayedActive;
+        mbButton.buttonState = ButtonStateDisplayedInactive;
         mbButton.alpha = 1.f;
     }];
 }
@@ -359,7 +372,6 @@ typedef enum : NSUInteger {
         self.isDisplayingAll = YES;
         [self.mMinimalBarDelegate displayAllScreensWithStartingDisplayOn:longPressGesture.view.tag];
         [self positionAllButtonsForOverView];
-//        [self scrollOverviewButtonsWithPercentage:longPressGesture.view.tag];
     }
 }
 

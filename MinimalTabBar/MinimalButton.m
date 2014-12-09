@@ -10,28 +10,30 @@
 
 @implementation MinimalButton
 
--(id)initWithButtonWithSection:(MinimalSection*)section{
+-(id)initWithButtonWithTabBarItem:(UITabBarItem*)tabBarItem{
     self = [super init];
     if (self) {
 
-        self.tag = section.index;
-        self.selected = YES;
+        self.tag = tabBarItem.tag;
         self.translatesAutoresizingMaskIntoConstraints = NO;
-        self.buttonState = ButtonStateDisplayedInactive;
+        
+        _buttonState = ButtonStateDisplayedInactive;
         
         [[self imageView] setContentMode:UIViewContentModeScaleAspectFit];
-        
-        UIImage *image = [section.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
-        [self setImage:image forState:UIControlStateNormal];
-        [self setImage:image forState:UIControlStateSelected];
+        UIImage *defaultImage = [tabBarItem.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        UIImage *selectedImage = [tabBarItem.selectedImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        
+        [self setImage:defaultImage forState:UIControlStateNormal];
+        [self setImage:selectedImage forState:UIControlStateSelected];
         
         _title = [[UILabel alloc] init];
         _title.translatesAutoresizingMaskIntoConstraints = NO;
-        _title.text = section.title;
+        _title.text = tabBarItem.title;
         _title.font = [UIFont fontWithName:@"Avenir-Heavy" size:10.f];
         _title.textColor = [UIColor whiteColor];
         [_title sizeToFit];
+        
         [self addSubview:_title];
         
         [self addConstraints:[self defaultConstraints]];
@@ -63,22 +65,54 @@
     return [constraints copy];
 }
 
-
 -(void)setButtonState:(ButtonState)buttonState{
-    
     _buttonState = buttonState;
-    if (buttonState == ButtonStateDisplayedInactive) {
-        _title.alpha = .3;
-    }else{
-        _title.alpha = 1;
+    
+    switch (buttonState) {
+        case ButtonStateDisplayedActive:
+            [self setButtonToTintColor:_selectedTintColor];
+            [self setSelected:NO];
+            break;
+            
+        case ButtonStateDisplayedInactive:
+            [self setButtonToTintColor:_defaultTintColor];
+            [self setSelected:NO];
+            break;
+            
+        case ButtonStateSelected:
+            [self setButtonToTintColor:_selectedTintColor];
+            [self setSelected:YES];
+            break;
+            
+        default:
+            break;
     }
+    
+//    if (buttonState == ButtonStateDisplayedInactive) {
+//        _title.alpha = .4;
+//    }else{
+//        _title.alpha = 1;
+//    }
 }
 
--(void)setTintColor:(UIColor *)tintColor{
+-(void)setDefaultTintColor:(UIColor *)defaultTintColor{
+    _defaultTintColor = defaultTintColor;
+    [self setButtonToTintColor:defaultTintColor];
+}
+
+-(void)setSelectedTintColor:(UIColor *)selectedTintColor{
+    _selectedTintColor = selectedTintColor;
+}
+
+-(void)setButtonToTintColor:(UIColor*)tintColor{
     _title.textColor = tintColor;
     self.imageView.tintColor = tintColor;
 }
 
+-(void)setShowTitle:(BOOL)showTitle{
+    _showTitle = showTitle;
+    _title.hidden = !showTitle;
+}
 
 
 

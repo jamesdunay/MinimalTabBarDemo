@@ -8,7 +8,6 @@
 
 #import "UIMinimalBarController.h"
 #import "UIViewHitTestOverride.h"
-#import "MinimalSection.h"
 #import <QuartzCore/QuartzCore.h>
 
 static CGFloat minimalBarHeight = 70.f;
@@ -16,7 +15,8 @@ static CGFloat minimalBarHeight = 70.f;
 @interface UIMinimalBarController ()
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIViewHitTestOverride *coverView;
-@property (nonatomic) CGAffineTransform viewControllertransform;
+@property (nonatomic) CGAffineTransform viewControllerTransform;
+@property (nonatomic) CGAffineTransform scrollViewTransform;
 @end
 
 
@@ -26,7 +26,7 @@ static CGFloat minimalBarHeight = 70.f;
 - (id)init {
     self = [super init];
     if (self) {
-        _tintColor = [UIColor whiteColor];
+        _defaultTintColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -38,7 +38,7 @@ static CGFloat minimalBarHeight = 70.f;
 
 - (void)setupViews {
     _minimalBar = [[MinimalBar alloc] init];
-    _sections = [[NSArray alloc] init];
+    _viewControllers = [[NSArray alloc] init];
     _scrollView = [[UIScrollView alloc] init];
     
     _coverView = [[UIViewHitTestOverride alloc] init];
@@ -51,12 +51,15 @@ static CGFloat minimalBarHeight = 70.f;
     [_scrollView setClipsToBounds:NO];
     [_scrollView setAutoresizesSubviews:NO];
     [_scrollView setFrame:self.view.frame];
+    _scrollViewTransform = _scrollView.transform;
     [_coverView addSubview:_scrollView];
     
     _minimalBar.mMinimalBarDelegate = self;
     _minimalBar.screenHeight = self.view.frame.size.height;
     _minimalBar.translatesAutoresizingMaskIntoConstraints = NO;
-    _minimalBar.tintColor = _tintColor;
+    _minimalBar.defaultTintColor = _defaultTintColor;
+    _minimalBar.selectedTintColor = _selectedTintColor;
+    
     [self.view addSubview:_minimalBar];
     
     [self.view addConstraints:[self defaultConstraints]];
@@ -131,7 +134,7 @@ static CGFloat minimalBarHeight = 70.f;
 }
 
 - (void)didSwitchToIndex:(NSUInteger)pageIndex {
-    CGFloat xPoint = pageIndex * 320;
+    CGFloat xPoint = pageIndex * self.scrollView.frame.size.width;
     [UIView animateWithDuration:.2f animations: ^{
         [self.scrollView setContentOffset:CGPointMake(xPoint, 0)];
     }];
@@ -161,7 +164,7 @@ static CGFloat minimalBarHeight = 70.f;
 
 - (void)selectedView:(UITapGestureRecognizer *)tap {
     [self sendViewsToBackPosition:NO];
-    [_coverView setUserInteractionEnabled:NO];
+
     
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
@@ -185,23 +188,35 @@ static CGFloat minimalBarHeight = 70.f;
 #pragma Mark ScrollView Depth Toggle
 - (void)sendViewsToBackPosition:(BOOL)sendBack {
     void (^scrollViewAnimation)(void) = ^{
-        CATransform3D transform = CATransform3DIdentity;
-        transform.m34 = 1.0f / -500.f;
-        CGFloat zPos = -400.f * (CGFloat)sendBack;
-        transform = CATransform3DTranslate(transform, 0.f, 0.f, zPos);
-        _scrollView.layer.transform = transform;
+        if (sendBack) {
+            CATransform3D transform = CATransform3DIdentity;
+            transform.m34 = 1.0f / -750.f;
+            transform = CATransform3DTranslate(transform, 0.f, 30.f, -100.f);
+            transform = CATransform3DRotate(transform, 20.f * M_PI/180, -1, 0, 0);
+            _scrollView.layer.transform = transform;
+        }else{
+            _scrollView.transform =  _scrollViewTransform;
+        }
     };
-    
-    [UIView animateWithDuration:.2f animations:scrollViewAnimation];
     
     void (^viewControllerAnimation)(void) = ^{
         [_scrollView.subviews enumerateObjectsUsingBlock: ^(UIView *view, NSUInteger idx, BOOL *stop) {
             CGFloat scaleAmount = sendBack ? .9f : 1.f;
-            view.transform = CGAffineTransformScale(_viewControllertransform, scaleAmount, scaleAmount);
+            view.transform = CGAffineTransformScale(_viewControllerTransform, scaleAmount, scaleAmount);
         }];
     };
     
-    [UIView animateWithDuration:.2f animations:viewControllerAnimation];
+    [UIView animateWithDuration:.6f
+                          delay:0.f
+         usingSpringWithDamping:150
+          initialSpringVelocity:15
+                        options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveEaseOut
+                     animations:^{
+                         scrollViewAnimation();
+                         viewControllerAnimation();
+                     } completion:^(BOOL finished) {
+                         
+                     }];
 }
 
 #pragma ScrollView Delegate
@@ -211,21 +226,22 @@ static CGFloat minimalBarHeight = 70.f;
     [_minimalBar scrollOverviewButtonsWithPercentage:contentOffSet / _coverView.frame.size.width];
 }
 
+
+
 #pragma Interface Usability
 
 - (void)allowScrollViewUserInteraction:(BOOL)allowInteraction {
-    [_scrollView setUserInteractionEnabled:allowInteraction];
-    [_coverView setUserInteractionEnabled:allowInteraction];
+    [_scrollView setScrollEnabled:allowInteraction];
 }
 
 
 
 #pragma Mark Setters
 
-- (void)setSections:(NSArray *)sections {
-    _sections = sections;
+- (void)setViewControllers:(NSArray *)viewControllers {
+    _viewControllers = viewControllers;
     
-    [_scrollView setContentSize:CGSizeMake(self.view.frame.size.width * _sections.count, self.view.frame.size.height)];
+    [_scrollView setContentSize:CGSizeMake(self.view.frame.size.width * _viewControllers.count, self.view.frame.size.height)];
     
     if (self.scrollView.subviews) {
         [self.scrollView.subviews enumerateObjectsUsingBlock: ^(UIView *view, NSUInteger idx, BOOL *stop) {
@@ -233,22 +249,35 @@ static CGFloat minimalBarHeight = 70.f;
         }];
     }
     
-    [_sections enumerateObjectsUsingBlock: ^(MinimalSection* section, NSUInteger idx, BOOL *stop) {
-        section.viewController.view.frame = CGRectMake(self.view.frame.size.width * idx, 0, self.view.frame.size.width, self.view.frame.size.height);
-        section.viewController.view.tag = idx;
-        section.index = idx;
+    [_viewControllers enumerateObjectsUsingBlock: ^(UIViewController* viewController, NSUInteger idx, BOOL *stop) {
+        viewController.view.frame = CGRectMake(self.view.frame.size.width * idx, 0, self.view.frame.size.width, self.view.frame.size.height);
+        viewController.view.translatesAutoresizingMaskIntoConstraints = NO;
+        viewController.view.tag = idx;
+        viewController.tabBarItem.tag = idx;
         
-        _viewControllertransform = section.viewController.view.transform;
-        [self.scrollView addSubview:section.viewController.view];
+        _viewControllerTransform = viewController.view.transform;
+        [self.scrollView addSubview:viewController.view];
     }];
     
+    
+    
     [self.view addConstraints:[self defaultConstraints]];
-    [_minimalBar createMenuItems:_sections];
+    [_minimalBar createMenuItems:_viewControllers];
 }
 
--(void)setTintColor:(UIColor *)tintColor{
-    _tintColor = tintColor;
-    _minimalBar.tintColor = tintColor;
+-(void)setDefaultTintColor:(UIColor *)defaultTintColor{
+    _defaultTintColor = defaultTintColor;
+    _minimalBar.defaultTintColor = _defaultTintColor;
+}
+
+-(void)setSelectedTintColor:(UIColor *)selectedTintColor{
+    _selectedTintColor = selectedTintColor;
+    _minimalBar.selectedTintColor = _selectedTintColor;
+}
+
+-(void)setShowTitles:(BOOL)showTitles{
+    _showTitles = showTitles;
+    [_minimalBar setShowTitles:showTitles];
 }
 
 @end
