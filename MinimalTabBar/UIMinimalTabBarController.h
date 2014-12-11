@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MinimalBar.h"
+#import "UIMinimalTabBar.h"
 
-@interface UIMinimalBarController : UIViewController <MinimalBarDelegate, UIScrollViewDelegate>
+@interface UIMinimalTabBarController : UIViewController <MinimalBarDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) NSArray *viewControllers;
-@property (nonatomic, strong) MinimalBar *minimalBar;
+@property (nonatomic, strong) UIMinimalTabBar *minimalBar;
 
 @end

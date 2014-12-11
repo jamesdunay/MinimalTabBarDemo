@@ -16,7 +16,7 @@ typedef enum : NSUInteger {
 
 
 
-@interface MinimalButton : UIButton
+@interface UIMinimalTabBarButton : UIButton
 
 @property (nonatomic) ButtonState buttonState;
 

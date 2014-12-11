@@ -6,20 +6,20 @@
 //  Copyright (c) 2014 James.Dunay. All rights reserved.
 //
 
-#import "UIMinimalBarController.h"
+#import "UIMinimalTabBarController.h"
 #import "UIViewHitTestOverride.h"
 #import <QuartzCore/QuartzCore.h>
 
 static CGFloat minimalBarHeight = 70.f;
 
-@interface UIMinimalBarController ()
+@interface UIMinimalTabBarController ()
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIViewHitTestOverride *coverView;
 @property (nonatomic) CGAffineTransform viewControllerTransform;
 @property (nonatomic) CGAffineTransform scrollViewTransform;
 @end
 
-@implementation UIMinimalBarController
+@implementation UIMinimalTabBarController
 
 - (id)init {
     self = [super init];
@@ -34,7 +34,7 @@ static CGFloat minimalBarHeight = 70.f;
 }
 
 - (void)setupViews {
-    _minimalBar = [[MinimalBar alloc] init];
+    _minimalBar = [[UIMinimalTabBar alloc] init];
     _viewControllers = [[NSArray alloc] init];
     _scrollView = [[UIScrollView alloc] init];
     
@@ -255,10 +255,8 @@ static CGFloat minimalBarHeight = 70.f;
         [self.scrollView addSubview:viewController.view];
     }];
     
-    
-    
     [self.view addConstraints:[self defaultConstraints]];
-    [_minimalBar createMenuItems:_viewControllers];
+    [_minimalBar createButtonItems:_viewControllers];
 }
 
 @end

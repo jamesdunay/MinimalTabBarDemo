@@ -9,7 +9,7 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MinimalTabBar/MinimalButton.m"
+            filePath = "MinimalTabBar/UIMinimalTabBarButton.m"
             timestampString = "439799667.062694"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"

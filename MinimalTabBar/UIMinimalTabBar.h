@@ -18,7 +18,7 @@
 
 @end
 
-@interface MinimalBar : UIView <UIGestureRecognizerDelegate>
+@interface UIMinimalTabBar : UIView <UIGestureRecognizerDelegate>
 
 @property (nonatomic) CGFloat displayOverviewYCoord;
 @property (nonatomic) CGFloat screenHeight;
@@ -32,6 +32,6 @@
 
 - (void)scrollOverviewButtonsWithPercentage:(CGFloat)offsetPercentage;
 - (void)returnMenuToSelected:(NSUInteger)index;
-- (void)createMenuItems:(NSArray *)viewControllers;
+- (void)createButtonItems:(NSArray *)viewControllers;
 
 @end
