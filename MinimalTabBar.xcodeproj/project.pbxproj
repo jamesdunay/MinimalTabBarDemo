@@ -17,15 +17,15 @@
 		2937ED731A1D3BDF0059461B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED721A1D3BDF0059461B /* AppDelegate.m */; };
 		2937ED7B1A1D3BDF0059461B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2937ED7A1A1D3BDF0059461B /* Images.xcassets */; };
 		2937ED8A1A1D3BDF0059461B /* MinimalTabBarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED891A1D3BDF0059461B /* MinimalTabBarTests.m */; };
-		2937ED9C1A1D3E0C0059461B /* UIMinimalBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED9B1A1D3E0C0059461B /* UIMinimalBarController.m */; };
-		2937ED9F1A1D6C7F0059461B /* MinimalBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED9E1A1D6C7F0059461B /* MinimalBar.m */; };
+		2937ED9C1A1D3E0C0059461B /* UIMinimalTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED9B1A1D3E0C0059461B /* UIMinimalTabBarController.m */; };
+		2937ED9F1A1D6C7F0059461B /* UIMinimalTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED9E1A1D6C7F0059461B /* UIMinimalTabBar.m */; };
 		29775B591A2FBB47007C81F9 /* UIViewHitTestOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 29775B581A2FBB47007C81F9 /* UIViewHitTestOverride.m */; };
 		299045D31A344A540045F4A8 /* icon_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 299045CC1A344A540045F4A8 /* icon_1@2x.png */; };
 		299045D41A344A540045F4A8 /* icon_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 299045CD1A344A540045F4A8 /* icon_2@2x.png */; };
 		299045D51A344A540045F4A8 /* icon_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 299045CE1A344A540045F4A8 /* icon_3@2x.png */; };
 		299045D61A344A540045F4A8 /* icon_4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 299045CF1A344A540045F4A8 /* icon_4@2x.png */; };
 		299045D71A344A540045F4A8 /* icon_5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 299045D01A344A540045F4A8 /* icon_5@2x.png */; };
-		29DCD55C1A34C83200DD96F9 /* MinimalButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 29DCD55B1A34C83200DD96F9 /* MinimalButton.m */; };
+		29DCD55C1A34C83200DD96F9 /* UIMinimalTabBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 29DCD55B1A34C83200DD96F9 /* UIMinimalTabBarButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,10 +54,10 @@
 		2937ED831A1D3BDF0059461B /* MinimalTabBarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MinimalTabBarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2937ED881A1D3BDF0059461B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2937ED891A1D3BDF0059461B /* MinimalTabBarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MinimalTabBarTests.m; sourceTree = "<group>"; };
-		2937ED9A1A1D3E0C0059461B /* UIMinimalBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMinimalBarController.h; sourceTree = "<group>"; };
-		2937ED9B1A1D3E0C0059461B /* UIMinimalBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMinimalBarController.m; sourceTree = "<group>"; };
-		2937ED9D1A1D6C7F0059461B /* MinimalBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinimalBar.h; sourceTree = "<group>"; };
-		2937ED9E1A1D6C7F0059461B /* MinimalBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinimalBar.m; sourceTree = "<group>"; };
+		2937ED9A1A1D3E0C0059461B /* UIMinimalTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMinimalTabBarController.h; sourceTree = "<group>"; };
+		2937ED9B1A1D3E0C0059461B /* UIMinimalTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMinimalTabBarController.m; sourceTree = "<group>"; };
+		2937ED9D1A1D6C7F0059461B /* UIMinimalTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMinimalTabBar.h; sourceTree = "<group>"; };
+		2937ED9E1A1D6C7F0059461B /* UIMinimalTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMinimalTabBar.m; sourceTree = "<group>"; };
 		29775B571A2FBB47007C81F9 /* UIViewHitTestOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewHitTestOverride.h; sourceTree = "<group>"; };
 		29775B581A2FBB47007C81F9 /* UIViewHitTestOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewHitTestOverride.m; sourceTree = "<group>"; };
 		299045CC1A344A540045F4A8 /* icon_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_1@2x.png"; sourceTree = "<group>"; };
@@ -67,8 +67,8 @@
 		299045D01A344A540045F4A8 /* icon_5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_5@2x.png"; sourceTree = "<group>"; };
 		299045E01A34C4A20045F4A8 /* Avenir Next Condensed.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Avenir Next Condensed.ttc"; sourceTree = "<group>"; };
 		299045E11A34C4A20045F4A8 /* Avenir Next.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Avenir Next.ttc"; sourceTree = "<group>"; };
-		29DCD55A1A34C83200DD96F9 /* MinimalButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinimalButton.h; sourceTree = "<group>"; };
-		29DCD55B1A34C83200DD96F9 /* MinimalButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinimalButton.m; sourceTree = "<group>"; };
+		29DCD55A1A34C83200DD96F9 /* UIMinimalTabBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIMinimalTabBarButton.h; sourceTree = "<group>"; };
+		29DCD55B1A34C83200DD96F9 /* UIMinimalTabBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIMinimalTabBarButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,14 +150,14 @@
 		2937ED991A1D3BF70059461B /* Minimal_Tabbar */ = {
 			isa = PBXGroup;
 			children = (
-				2937ED9A1A1D3E0C0059461B /* UIMinimalBarController.h */,
-				2937ED9B1A1D3E0C0059461B /* UIMinimalBarController.m */,
-				2937ED9D1A1D6C7F0059461B /* MinimalBar.h */,
-				2937ED9E1A1D6C7F0059461B /* MinimalBar.m */,
+				2937ED9A1A1D3E0C0059461B /* UIMinimalTabBarController.h */,
+				2937ED9B1A1D3E0C0059461B /* UIMinimalTabBarController.m */,
+				2937ED9D1A1D6C7F0059461B /* UIMinimalTabBar.h */,
+				2937ED9E1A1D6C7F0059461B /* UIMinimalTabBar.m */,
 				29775B571A2FBB47007C81F9 /* UIViewHitTestOverride.h */,
 				29775B581A2FBB47007C81F9 /* UIViewHitTestOverride.m */,
-				29DCD55A1A34C83200DD96F9 /* MinimalButton.h */,
-				29DCD55B1A34C83200DD96F9 /* MinimalButton.m */,
+				29DCD55A1A34C83200DD96F9 /* UIMinimalTabBarButton.h */,
+				29DCD55B1A34C83200DD96F9 /* UIMinimalTabBarButton.m */,
 			);
 			name = Minimal_Tabbar;
 			sourceTree = "<group>";
@@ -298,12 +298,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2937ED9F1A1D6C7F0059461B /* MinimalBar.m in Sources */,
+				2937ED9F1A1D6C7F0059461B /* UIMinimalTabBar.m in Sources */,
 				29775B591A2FBB47007C81F9 /* UIViewHitTestOverride.m in Sources */,
 				2937ED731A1D3BDF0059461B /* AppDelegate.m in Sources */,
 				2937ED701A1D3BDF0059461B /* main.m in Sources */,
-				29DCD55C1A34C83200DD96F9 /* MinimalButton.m in Sources */,
-				2937ED9C1A1D3E0C0059461B /* UIMinimalBarController.m in Sources */,
+				29DCD55C1A34C83200DD96F9 /* UIMinimalTabBarButton.m in Sources */,
+				2937ED9C1A1D3E0C0059461B /* UIMinimalTabBarController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

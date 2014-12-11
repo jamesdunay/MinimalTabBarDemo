@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 James.Dunay. All rights reserved.
 //
 
-#import "MinimalBar.h"
-#import "MinimalButton.h"
+#import "UIMinimalTabBar.h"
+#import "UIMinimalTabBarButton.h"
 #import <QuartzCore/QuartzCore.h>
 
 #pragma Mark Enums ---
@@ -18,7 +18,7 @@ typedef enum : NSUInteger {
     MenuStateFullyOpened = (1 << 2),
 } MenuState;
 
-@interface MinimalBar ()
+@interface UIMinimalTabBar ()
 
 @property (nonatomic) CGFloat firstX;
 @property (nonatomic) CGFloat firstY;
@@ -28,7 +28,7 @@ typedef enum : NSUInteger {
 @property (nonatomic) BOOL isDisplayingAll;
 @end
 
-@implementation MinimalBar
+@implementation UIMinimalTabBar
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -39,12 +39,12 @@ typedef enum : NSUInteger {
 
 #pragma Mark Minimal Bar Buttons ---
 
-- (void)createMenuItems:(NSArray *)viewControllers {
+- (void)createButtonItems:(NSArray *)viewControllers {
     self.buttons = [[NSMutableArray alloc] init];
     
     [viewControllers enumerateObjectsUsingBlock: ^(UIViewController* viewController, NSUInteger idx, BOOL *stop) {
         
-        MinimalButton *mbButton = [[MinimalButton alloc] initWithButtonWithTabBarItem:viewController.tabBarItem];
+        UIMinimalTabBarButton *mbButton = [[UIMinimalTabBarButton alloc] initWithButtonWithTabBarItem:viewController.tabBarItem];
         mbButton.defaultTintColor = _defaultTintColor;
         mbButton.selectedTintColor = _selectedTintColor;
         mbButton.showTitle = _showTitles;
@@ -69,14 +69,14 @@ typedef enum : NSUInteger {
 
 -(void)setDefaultTintColor:(UIColor *)defaultTintColor{
     _defaultTintColor = defaultTintColor;
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         mbButton.tintColor = defaultTintColor;
     }];
 }
 
 -(void)setSelectedTintColor:(UIColor *)selectedTintColor{
     _selectedTintColor = selectedTintColor;
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         mbButton.selectedTintColor = selectedTintColor;
     }];
 }
@@ -87,7 +87,7 @@ typedef enum : NSUInteger {
 
 - (NSArray *)defaultConstraints {
     NSMutableArray *constraints = [[NSMutableArray alloc] init];
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         [constraints addObject:[NSLayoutConstraint constraintWithItem:mbButton
                                                             attribute:NSLayoutAttributeWidth
                                                             relatedBy:NSLayoutRelationEqual
@@ -122,7 +122,7 @@ typedef enum : NSUInteger {
 
 -(NSArray*)defaultAdjustableConstraints{
     NSMutableArray* constraints = [[NSMutableArray alloc] init];
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         NSLayoutConstraint *adjustableConstraint = [NSLayoutConstraint constraintWithItem:self.buttons[idx]
                                                                                 attribute:NSLayoutAttributeLeft
                                                                                 relatedBy:NSLayoutRelationEqual
@@ -141,7 +141,7 @@ typedef enum : NSUInteger {
 
 - (void)touchedButton:(id)sender {
     if (!self.isDisplayingAll) {
-        MinimalButton *mbButton = (MinimalButton *)[sender view];
+        UIMinimalTabBarButton *mbButton = (UIMinimalTabBarButton *)[sender view];
         
         switch ([mbButton buttonState]) {
             case ButtonStateDisplayedInactive:
@@ -202,7 +202,7 @@ typedef enum : NSUInteger {
 - (void)displayAllButtons {
     [self shouldEnablePanGestures:NO];
     
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         if (mbButton.buttonState == ButtonStateSelected)    mbButton.buttonState = ButtonStateDisplayedActive;
         else                                                mbButton.buttonState = ButtonStateDisplayedInactive;
     }];
@@ -231,13 +231,13 @@ typedef enum : NSUInteger {
 }
 
 - (void)showAllButtons {
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         mbButton.alpha = 1.f;
     }];
 }
 
 - (void)hideNonSelectedMenuItems {
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         if (mbButton.buttonState != ButtonStateSelected) {
             mbButton.alpha = 0.f;
         }
@@ -246,14 +246,14 @@ typedef enum : NSUInteger {
 
 - (void)setShowTitles:(BOOL)showTitles{
     _showTitles = showTitles;
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         mbButton.showTitle = showTitles;
     }];
 }
 
 -(void)setHidesTitlesWhenSelected:(BOOL)hidesTitlesWhenSelected{
     _hidesTitlesWhenSelected = hidesTitlesWhenSelected;
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         mbButton.hideTitleWhenSelected = hidesTitlesWhenSelected;
     }];
 }
@@ -297,8 +297,8 @@ typedef enum : NSUInteger {
     NSInteger targetedIndex = activeIndex + indextAdjustment;
     
     if (targetedIndex >= 0 && targetedIndex < self.buttons.count) {
-        MinimalButton *activeButton = self.buttons[activeIndex];
-        MinimalButton *nextButton = self.buttons[activeIndex + indextAdjustment];
+        UIMinimalTabBarButton *activeButton = self.buttons[activeIndex];
+        UIMinimalTabBarButton *nextButton = self.buttons[activeIndex + indextAdjustment];
         
         [activeButton setButtonState:ButtonStateDisplayedInactive];
         [nextButton setButtonState:ButtonStateSelected];
@@ -306,7 +306,7 @@ typedef enum : NSUInteger {
         [self bringSubviewToFront:nextButton];
         void (^animations)(void) = ^{
             [self.adjustableButtonConstaints enumerateObjectsUsingBlock: ^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
-                if ([(MinimalButton *)constraint.firstItem isEqual : self.buttons[[self indexOfActiveButton]]]) {
+                if ([(UIMinimalTabBarButton *)constraint.firstItem isEqual : self.buttons[[self indexOfActiveButton]]]) {
                     constraint.constant = self.frame.size.width / 5 * 2;
                 }
             }];
@@ -358,7 +358,7 @@ typedef enum : NSUInteger {
 }
 
 - (void)showAllButtonsInOverviewMode {
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         mbButton.buttonState = ButtonStateDisplayedInactive;
         mbButton.alpha = 1.f;
     }];
@@ -386,7 +386,7 @@ typedef enum : NSUInteger {
 #pragma Mark Helper Methods ---
 
 - (void)shouldEnablePanGestures:(BOOL)enable {
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         [mbButton.gestureRecognizers enumerateObjectsUsingBlock: ^(UIGestureRecognizer *gesture, NSUInteger idx, BOOL *stop) {
             if ([gesture isKindOfClass:[UIPanGestureRecognizer class]]) {
                 gesture.enabled = enable;
@@ -397,7 +397,7 @@ typedef enum : NSUInteger {
 
 - (NSUInteger)indexOfActiveButton {
     __block NSUInteger index = 0;
-    [self.buttons enumerateObjectsUsingBlock: ^(MinimalButton *mbButton, NSUInteger idx, BOOL *stop) {
+    [self.buttons enumerateObjectsUsingBlock: ^(UIMinimalTabBarButton *mbButton, NSUInteger idx, BOOL *stop) {
         if (mbButton.buttonState == ButtonStateSelected) {
             index = idx;
         }
