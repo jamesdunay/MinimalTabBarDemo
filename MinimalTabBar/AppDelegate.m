@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "UIMinimalTabBarController.h"
+#import "JDMinimalTabBarController.h"
 
 
 @interface AppDelegate ()
@@ -23,7 +23,7 @@
     self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
     
-    UIMinimalTabBarController *minimalTabBarViewController = [[UIMinimalTabBarController alloc] init];
+    JDMinimalTabBarController *minimalTabBarViewController = [[JDMinimalTabBarController alloc] init];
     
     UIImageView *sectionOneBackground = [[UIImageView alloc]initWithFrame:self.window.frame];
     [sectionOneBackground setImage:[UIImage imageNamed:@"mb_1"]];
@@ -75,13 +75,13 @@
     // Menu Icon -- DONE
     // Background Color -- DONE
     // Hide titles when selected toggle -- DONE
+    // On release change image icon    
+    
     
     // Landscape view
     // GIF -- Quicktime, or
     // Cocoapod -- http://blog.grio.com/2014/11/creating-a-private-cocoapod.html?utm_source=TapFame&utm_campaign=TapFame+newsletter&utm_medium=email
     
-//        Pick Software License
-//        MIT License (Expat)
     
     minimalTabBarViewController.minimalBar.defaultTintColor = [UIColor whiteColor];
     minimalTabBarViewController.minimalBar.selectedTintColor = [UIColor colorWithRed:222.0f/255.f green:157.0f/255.f blue:0.0f/255.f alpha:1.f];

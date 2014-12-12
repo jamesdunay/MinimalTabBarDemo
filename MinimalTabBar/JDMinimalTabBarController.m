@@ -6,20 +6,20 @@
 //  Copyright (c) 2014 James.Dunay. All rights reserved.
 //
 
-#import "UIMinimalTabBarController.h"
+#import "JDMinimalTabBarController.h"
 #import "UIViewHitTestOverride.h"
 #import <QuartzCore/QuartzCore.h>
 
 static CGFloat minimalBarHeight = 70.f;
 
-@interface UIMinimalTabBarController ()
+@interface JDMinimalTabBarController ()
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIViewHitTestOverride *coverView;
 @property (nonatomic) CGAffineTransform viewControllerTransform;
 @property (nonatomic) CGAffineTransform scrollViewTransform;
 @end
 
-@implementation UIMinimalTabBarController
+@implementation JDMinimalTabBarController
 
 - (id)init {
     self = [super init];
@@ -34,7 +34,7 @@ static CGFloat minimalBarHeight = 70.f;
 }
 
 - (void)setupViews {
-    _minimalBar = [[UIMinimalTabBar alloc] init];
+    _minimalBar = [[JDMinimalTabBar alloc] init];
     _viewControllers = [[NSArray alloc] init];
     _scrollView = [[UIScrollView alloc] init];
     
@@ -161,10 +161,6 @@ static CGFloat minimalBarHeight = 70.f;
 - (void)selectedView:(UITapGestureRecognizer *)tap {
     [self sendViewsToBackPosition:NO];
 
-    
-    
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
-    
     NSInteger selectedTag = [tap view].tag;
     [self.minimalBar returnMenuToSelected:selectedTag];
     
