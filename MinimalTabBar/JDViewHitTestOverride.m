@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 James.Dunay. All rights reserved.
 //
 
-#import "UIViewHitTestOverride.h"
+#import "JDViewHitTestOverride.h"
 
-@implementation UIViewHitTestOverride
+@implementation JDViewHitTestOverride
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     UIView* child = [super hitTest:point withEvent:event];

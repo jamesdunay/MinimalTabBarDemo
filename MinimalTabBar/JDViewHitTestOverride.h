@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIViewHitTestOverride : UIView
+@interface JDViewHitTestOverride : UIView
 
 @property(nonatomic, strong)UIScrollView* scrollView;
 

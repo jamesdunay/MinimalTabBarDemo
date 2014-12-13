@@ -19,7 +19,7 @@
 		2937ED8A1A1D3BDF0059461B /* MinimalTabBarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED891A1D3BDF0059461B /* MinimalTabBarTests.m */; };
 		2937ED9C1A1D3E0C0059461B /* JDMinimalTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED9B1A1D3E0C0059461B /* JDMinimalTabBarController.m */; };
 		2937ED9F1A1D6C7F0059461B /* JDMinimalTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2937ED9E1A1D6C7F0059461B /* JDMinimalTabBar.m */; };
-		29775B591A2FBB47007C81F9 /* UIViewHitTestOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 29775B581A2FBB47007C81F9 /* UIViewHitTestOverride.m */; };
+		29775B591A2FBB47007C81F9 /* JDViewHitTestOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 29775B581A2FBB47007C81F9 /* JDViewHitTestOverride.m */; };
 		299045D31A344A540045F4A8 /* icon_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 299045CC1A344A540045F4A8 /* icon_1@2x.png */; };
 		299045D41A344A540045F4A8 /* icon_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 299045CD1A344A540045F4A8 /* icon_2@2x.png */; };
 		299045D51A344A540045F4A8 /* icon_3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 299045CE1A344A540045F4A8 /* icon_3@2x.png */; };
@@ -58,8 +58,8 @@
 		2937ED9B1A1D3E0C0059461B /* JDMinimalTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDMinimalTabBarController.m; sourceTree = "<group>"; };
 		2937ED9D1A1D6C7F0059461B /* JDMinimalTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDMinimalTabBar.h; sourceTree = "<group>"; };
 		2937ED9E1A1D6C7F0059461B /* JDMinimalTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDMinimalTabBar.m; sourceTree = "<group>"; };
-		29775B571A2FBB47007C81F9 /* UIViewHitTestOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewHitTestOverride.h; sourceTree = "<group>"; };
-		29775B581A2FBB47007C81F9 /* UIViewHitTestOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewHitTestOverride.m; sourceTree = "<group>"; };
+		29775B571A2FBB47007C81F9 /* JDViewHitTestOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDViewHitTestOverride.h; sourceTree = "<group>"; };
+		29775B581A2FBB47007C81F9 /* JDViewHitTestOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDViewHitTestOverride.m; sourceTree = "<group>"; };
 		299045CC1A344A540045F4A8 /* icon_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_1@2x.png"; sourceTree = "<group>"; };
 		299045CD1A344A540045F4A8 /* icon_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_2@2x.png"; sourceTree = "<group>"; };
 		299045CE1A344A540045F4A8 /* icon_3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_3@2x.png"; sourceTree = "<group>"; };
@@ -154,8 +154,8 @@
 				2937ED9B1A1D3E0C0059461B /* JDMinimalTabBarController.m */,
 				2937ED9D1A1D6C7F0059461B /* JDMinimalTabBar.h */,
 				2937ED9E1A1D6C7F0059461B /* JDMinimalTabBar.m */,
-				29775B571A2FBB47007C81F9 /* UIViewHitTestOverride.h */,
-				29775B581A2FBB47007C81F9 /* UIViewHitTestOverride.m */,
+				29775B571A2FBB47007C81F9 /* JDViewHitTestOverride.h */,
+				29775B581A2FBB47007C81F9 /* JDViewHitTestOverride.m */,
 				29DCD55A1A34C83200DD96F9 /* JDMinimalTabBarButton.h */,
 				29DCD55B1A34C83200DD96F9 /* JDMinimalTabBarButton.m */,
 			);
@@ -299,7 +299,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2937ED9F1A1D6C7F0059461B /* JDMinimalTabBar.m in Sources */,
-				29775B591A2FBB47007C81F9 /* UIViewHitTestOverride.m in Sources */,
+				29775B591A2FBB47007C81F9 /* JDViewHitTestOverride.m in Sources */,
 				2937ED731A1D3BDF0059461B /* AppDelegate.m in Sources */,
 				2937ED701A1D3BDF0059461B /* main.m in Sources */,
 				29DCD55C1A34C83200DD96F9 /* JDMinimalTabBarButton.m in Sources */,
